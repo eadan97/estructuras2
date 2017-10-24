@@ -1,7 +1,8 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
+<RCC>
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MainForm.ui.qml</file>
+        <file>StartDialog.qml</file>
+        <file>StartDialogForm.ui.qml</file>
     </qresource>
 </RCC>

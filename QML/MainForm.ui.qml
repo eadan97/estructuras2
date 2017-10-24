@@ -15,11 +15,12 @@ Rectangle {
     TextEdit {
         id: textEdit
         text: qsTr("Enter some text...")
+        textFormat: Text.AutoText
         verticalAlignment: Text.AlignVCenter
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 20
-        Rectangle {
+         Rectangle {
             anchors.fill: parent
             anchors.margins: -10
             color: "transparent"

@@ -7,10 +7,16 @@ Window {
     height: 480
     title: qsTr("Hello World")
 
+    StartDialog{
+
+    }
+
     MainForm {
         anchors.fill: parent
         mouseArea.onClicked: {
             console.log(qsTr('Clicked on background. Text: "' + textEdit.text + '"'))
         }
+        textEdit.onTextChanged: {
+        console.log(qsTr('Text changed. Text: "'+textEdit.text+'"'))}
     }
 }
