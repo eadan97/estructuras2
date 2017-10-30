@@ -29,8 +29,8 @@ struct Persona
 struct PersonaLista
 {
     Persona*dato;
-    Persona*siguiente;
-    Persona*anterior;
+    PersonaLista*siguiente;
+    PersonaLista*anterior;
     PersonaLista(Persona *persona) {
         this->dato=persona;
     }
@@ -58,7 +58,7 @@ struct PersonaLista
     }
 };
 
-struct PersonaArbol
+/*struct PersonaArbol
 {
     PersonaLista*dato;
     Persona*izquierdo;
@@ -66,13 +66,43 @@ struct PersonaArbol
     PersonaArbol(PersonaLista *personaLista) {
         this->dato=personaLista;
     }
-};
+};*/
 struct Mundo
 {
 
-    PersonaArbol*arbolPrimero;
+    AVLtree<PersonaLista*> arbol;
     PersonaLista*listaPrimero;
     Mundo() {}
+
+    void generarPersonas(int cant);
+    //retorna la persona o la ultima hoja buscada
+    PersonaLista* encontrarPersonaEnArbol(AVLnode<PersonaLista*> *node, int id){
+        if(node==NULL)
+            return NULL;
+        else if(node->key->dato->id==id)
+            return node->key;
+        else if(node->key->dato->id>id)
+            return (node->right==NULL)?node->key : encontrarPersonaEnArbol(node->right,id);
+        else if(node->key->dato->id<id)
+            return (node->left==NULL)?node->key : encontrarPersonaEnArbol(node->left,id);
+    }
+
+    Persona* encontrarPersona(int id){
+        PersonaLista *aux=encontrarPersonaEnArbol(arbol.root,id);
+
+        if(aux->dato->id>id)
+            while(aux->dato->id>id)
+                aux=aux->anterior;
+        else if(aux->dato->id<id)
+            while(aux->dato->id<id)
+                aux=aux->siguiente;
+
+        if(aux->dato->id==id)
+            return aux->dato;
+        else
+            return NULL;
+
+    }
 
 
 };

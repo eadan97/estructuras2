@@ -26,9 +26,9 @@ public:
     bool insert(T key);
     void deleteKey(const T key);
     void printBalance();
+    AVLnode<T> *root;
 
 private:
-    AVLnode<T> *root;
 
     AVLnode<T>* rotateLeft          ( AVLnode<T> *a );
     AVLnode<T>* rotateRight         ( AVLnode<T> *a );

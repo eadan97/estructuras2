@@ -101,8 +101,9 @@ void Mundo::generarPersonas(int cant){
             aux=aux->siguiente;
         }
 
-
-
+        //todo: random para saber la cantidad de hijos, hacer random para decidir random (0 iz, 1 este, 2 derecha), hacer lista para ver si este ya se testeo para ser hijo, hacer funcion para saber si es decendiente en pesona
+        
+        
 
     }
 }

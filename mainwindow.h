@@ -20,22 +20,15 @@ public:
     ~MainWindow();
 
 
+
 private:
     Ui::MainWindow *ui;
 
     StartDialog* startDialog;
 
-    QStringList nombres;
-    QStringList apellidos;
-    QStringList paises;
-    QStringList creencias;
-    QStringList profesiones;
-
-    Mundo mundo;
-
-
-
     void procesarArchivo(QStringList&list,QString fileDir);
+    void arreglarPaises();
+
 
 };
 
