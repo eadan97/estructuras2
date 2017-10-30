@@ -13,7 +13,9 @@ struct Persona
     QString correo;
     QDateTime nacimiento;
     int pecados[7];
-    Persona *hijos[];
+    QVector <Persona*> hijos;
+    int cantHijos;
+
 
     Persona(int id, QString nombre, QString apellido, QString pais, QString creencia, QString profesion, QString correo) {
         this->id=id;
@@ -25,6 +27,29 @@ struct Persona
         this->nacimiento=QDateTime::currentDateTime();
         this->correo=correo;
     }
+
+    bool esDescendiente(Persona*aBuscar){
+        if(esHijo(aBuscar)||esNieto(aBuscar))
+            return true;
+        return false;
+    }
+
+    bool esHijo(Persona*aBuscar){
+        for (int i=0; i<hijos.size(); ++i ) {
+            if(aBuscar==hijos[i])
+                return true;
+        }
+        return false;
+    }
+
+    bool esNieto(Persona*aBuscar){
+        for (int i=0; i<hijos.size(); ++i ) {
+            if(hijos[i].esHijo(aBuscar))
+                return true;
+        }
+        return false;
+    }
+
 };
 struct PersonaLista
 {
@@ -103,6 +128,7 @@ struct Mundo
             return NULL;
 
     }
+
 
 
 };
