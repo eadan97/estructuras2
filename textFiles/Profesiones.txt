@@ -1,0 +1,50 @@
+Contable
+Actor / Actriz
+Azafata
+Arqueólogo
+Arquitecto
+Astronauta
+Panadero
+Biólogo/a
+Albañil
+Conductor/a de autobús
+Empresario
+Carnicero/a
+Portero, conserje
+Carpintero/a
+Cajero/a
+Limpiador, mujer de la limpieza
+Payaso
+Zapatero
+Consultor
+Cocinero
+Asesor, consultor
+Cocinero (profesional)
+Químico, farmaceútico
+Bailarín
+Decorador
+Dentista
+Diseñador
+Médico/a
+Modista
+Economista
+Electricista
+Ingeniero/a
+Granjero, agricultor
+Bombero
+Pescador
+Florista
+Frutero
+Recolector de basura
+Jardinero/a
+Peluquero/a
+Ama de casa
+Cazador
+Joyero/a
+Periodista
+Juez
+Abogado/a
+Bibliotecario/a
+Socorrista
+Cartero
+Mecánico

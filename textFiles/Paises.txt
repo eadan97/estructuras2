@@ -1,0 +1,100 @@
+China,Asia
+India,Asia
+United States,North America
+Indonesia,Asia
+Brazil,South America
+Pakistan,Asia
+Nigeria,Africa
+Bangladesh,Asia
+Russia,Europe
+Japan,Asia
+Mexico,North America
+Philippines,Asia
+Ethiopia,Africa
+Vietnam,Asia
+Egypt,Africa
+Germany,Europe
+Iran,Asia
+Turkey,Europe
+Democratic Republic of the Congo,Africa
+Thailand,Asia
+France,Europe
+United Kingdom,Europe
+Italy,Europe
+Myanmar,Asia
+South Africa,Africa
+Tanzania,Africa
+South Korea,Asia
+Colombia,South America
+Spain,Europe
+Kenya,Africa
+Ukraine,Europe
+Argentina,South America
+Sudan,Africa
+Algeria,Africa
+Uganda,Africa
+Poland,Europe
+Iraq,Asia
+Canada,North America
+Morocco,Africa
+Afghanistan,Asia
+Saudi Arabia,Asia
+Peru,South America
+Venezuela,South America
+Malaysia,Asia
+Uzbekistan,Asia
+Nepal,Asia
+Mozambique,Africa
+Ghana,Africa
+Yemen,Asia
+North Korea,Asia
+Angola,Africa
+Madagascar,Africa
+Australia,Oceania
+Taiwan,Asia
+Cameroon,Africa
+Cote d'Ivoire,Africa
+Sri Lanka,Asia
+Niger,Africa
+Romania,Europe
+Syria,Asia
+Burkina Faso,Africa
+Chile,South America
+Kazakhstan,Europe
+Mali,Africa
+Netherlands,Europe
+Malawi,Africa
+Guatemala,North America
+Zambia,Africa
+Ecuador,South America
+Cambodia,Asia
+Zimbabwe,Africa
+Senegal,Africa
+Chad,Africa
+Guinea,Africa
+South Sudan,Africa
+Rwanda,Africa
+Cuba,North America
+Belgium,Europe
+Tunisia,Africa
+Burundi,Africa
+Bolivia,South America
+Greece,Europe
+Benin,Africa
+Somalia,Africa
+Haiti,North America
+Czech Republic,Europe
+Dominican Republic,North America
+Portugal,Europe
+Hungary,Europe
+Sweden,Europe
+Azerbaijan,Asia
+Belarus,Europe
+Honduras,North America
+Austria,Europe
+Tajikistan,Asia
+Israel,Asia
+Switzerland,Europe
+Jordan,Asia
+Togo,Africa
+Bulgaria,Europe
