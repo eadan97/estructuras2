@@ -210,10 +210,10 @@ struct ListaPersonas
 
 struct PersonaArbolNodo
 {
-    PersonaLista*dato;
+    NodoPersona*dato;
     PersonaArbolNodo*izquierdo;
     PersonaArbolNodo*derecho;
-    PersonaArbolNodo(PersonaLista *personaLista) {
+    PersonaArbolNodo(NodoPersona *personaLista) {
         this->dato=personaLista;
     }
 };
@@ -221,7 +221,7 @@ struct PersonaArbolNodo
 struct PersonaArbol
 {
     PersonaArbolNodo*raiz;
-    QVector<PersonaLista*> listaDelArbol;
+    QVector<NodoPersona*> listaDelArbol;
 
     void generarArbol(){
         double logaritmo= log(listaDelArbol.size()+1)/log(2);//Logaritmo en base 2 de x+1
@@ -249,25 +249,25 @@ struct PersonaArbol
 struct Mundo
 {
 
-    AVLtree<NodoPersona*> arbol;
+    PersonaArbol arbol;
     ListaPersonas * listaPersonas;
     Mundo() {}
 
     void generarPersonas(int cant);
     //retorna la persona o la ultima hoja buscada
-    PersonaLista* encontrarPersonaEnArbol(PersonaArbolNodo *node, int id){
+    NodoPersona* encontrarPersonaEnArbol(PersonaArbolNodo *node, int id){
         if(node==NULL)
             return NULL;
         else if(node->dato->dato->id==id)
-            return node->key;
+            return node->dato;
         else if(node->dato->dato->id>id)
             return (node->derecho==NULL)?node->dato : encontrarPersonaEnArbol(node->derecho,id);
-        else if(node->key->dato->id<id)
+        else if(node->dato->dato->id<id)
             return (node->izquierdo==NULL)?node->dato : encontrarPersonaEnArbol(node->izquierdo,id);
     }
 
     Persona* encontrarPersona(int id){
-        PersonaLista *aux=encontrarPersonaEnArbol(arbol.raiz,id);
+        NodoPersona *aux=encontrarPersonaEnArbol(arbol.raiz,id);
 
         if(aux->dato->id>id)
             while(aux->dato->id>id)

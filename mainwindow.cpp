@@ -93,12 +93,12 @@ void Mundo::generarPersonas(int cant){
 
         Persona* nueva=new Persona(newId,nombre,apellido,pais,creencia,profesion,correo);
 
-        PersonaLista*auxPL=mundo->listaPrimero;
-        AVLtree<Persona*> * famila=new AVLtree<Persona*>;
+        NodoPersona*auxPL=mundo->listaPersonas->primeraPersona;
+        AVLtree<Persona*>*familia=new AVLtree<Persona*>;
         while (auxPL!=NULL) {
             Persona*auxDato=auxPL->dato;
             if(auxDato->apellido==apellido&&auxDato->pais==pais)
-                famila->insert(auxDato);
+                familia->insert(auxDato);
             auxPL=auxPL->siguiente;
         }
         //todo: creo que el arbol de la familia no deberia ser un puntero, y si no, hay que borrar los datos.
@@ -106,7 +106,7 @@ void Mundo::generarPersonas(int cant){
         srand(time(NULL));
         int cantHijos=rand()%9;
         AVLnode<Persona*>*aux=familia->root;
-        while (cantHijos>0||famila->root==NULL) {
+        while (cantHijos>0||familia->root==NULL) {
             srand(time(NULL));
             int seleccion=rand()%3;
             while(seleccion!=1){
@@ -115,12 +115,12 @@ void Mundo::generarPersonas(int cant){
                 else if(seleccion==2)
                     aux=aux->right;
                 if (aux==NULL)
-                    aux==famila->root;
+                    aux==familia->root;
             }
 
             if(!(aux->key->esDescendiente(nueva)))
                 nueva->hijos.append(aux->key);
-            famila->deleteKey(aux->key);
+            familia->deleteKey(aux->key);
             cantHijos-=1;
         }
 
