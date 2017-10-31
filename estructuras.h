@@ -223,7 +223,7 @@ struct Mundo
     }
 
     Persona* encontrarPersona(int id){
-        PersonaLista *aux=encontrarPersonaEnArbol(arbol.root,id);
+        NodoPersona *aux=encontrarPersonaEnArbol(arbol.root,id);
 
         if(aux->dato->id>id)
             while(aux->dato->id>id)
@@ -240,8 +240,177 @@ struct Mundo
     }
 
 
+    void sumarPecadosANietos(QVector<Persona*> hijos)
+    {
+        for (int i = 0 ; i < hijos.size() ; i++)
+        {
+            sumarPecadosAHijos(hijos.at(i));
+        }
+    }
+
+    void sumarPecadosAHijos(Persona * persona)
+    {
+
+        for (int i = 0; i < persona->hijos.size() ; i++)
+        {
+            Persona * hijoActual = persona->hijos.at(i);
+
+            for (int j = 0 ; j < 7 ; j++)
+            {
+                hijoActual->pecados[j] = persona->pecados[j] / 2;
+            }
+
+        }
+
+    }
+
+    void sumarPecadosAPersona(Persona * persona)
+    {
+        int aleatorio;
+        srand (time(NULL));
+        for (int i = 0; i < 7 ; i++)
+        {
+            aleatorio = rand() % 100;
+            persona->pecados[i] = aleatorio;
+
+        }
+        sumarPecadosAHijos(persona);
+        sumarPecadosANietos(persona->hijos);
+    }
+
+    //D: Función que recorre la lista de humanos y le suma a sus pecados
+    //E: Ninguna
+    //S: Ninguna
+    //R: Ninguna
+    void sumarPecadosAMundo()
+    {
+        NodoPersona * temporal = listaPersonas->primeraPersona;
+        while (temporal != NULL)
+        {
+            sumarPecadosAPersona(temporal->dato);
+            temporal = temporal->siguiente;
+        }
+    }
+
+    void resetearPecados(Persona * persona)
+    {
+        for (int i = 0 ; i < 7 ; i++)
+        {
+            persona->pecados[i] = 0;
+        }
+    }
 
 };
+
+struct NodoID
+{
+    int id;
+    NodoID * siguiente;
+    NodoID * anterior;
+
+    NodoID(int id)
+    {
+        this->id = id;
+        siguiente = anterior = NULL;
+    }
+};
+
+struct ListaIDS
+{
+    NodoID * primerID;
+    NodoID * ultimoID;
+
+    ListaIDS()
+    {
+        primerID = ultimoID = NULL;
+    }
+
+    void insertarAlInicio(int idNuevo)
+    {
+        NodoID * nuevo = new NodoID(idNuevo);
+
+        if (primerID == NULL)
+        {
+            primerID = ultimoID = nuevo;
+        }
+
+        else
+        {
+            primerID->anterior = nuevo;
+            primerID->anterior->siguiente = primerID;
+            primerID = primerID->anterior;
+        }
+    }
+
+    void insertarAlFinal(int idNuevo)
+    {
+        NodoID * nuevo = new NodoID(idNuevo);
+
+        if (primerID == NULL)
+        {
+            primerID = ultimoID = nuevo;
+        }
+
+        else
+        {
+            ultimoID->siguiente = nuevo;
+            ultimoID->siguiente->anterior = ultimoID;
+            ultimoID = ultimoID->siguiente;
+        }
+    }
+
+    void insertarID(int idNuevo)
+    {
+        if (!yaExiste(idNuevo))
+        {
+            NodoID * nuevo = new NodoID(idNuevo);
+
+            if (primerID->id > idNuevo)
+            {
+                insertarAlInicio(idNuevo);
+            }
+
+            else if (ultimoID->id < idNuevo)
+            {
+                insertarAlFinal(idNuevo);
+            }
+
+            else
+            {
+                NodoID * temporal = primerID;
+                while(temporal->id < idNuevo)
+                {
+                    temporal = temporal->siguiente;
+                }
+                temporal->anterior->siguiente = nuevo;
+                nuevo->siguiente = temporal;
+                nuevo->anterior = temporal->anterior;
+                temporal->anterior = nuevo;
+            }
+        }
+
+    }
+
+    bool yaExiste(int id)
+    {
+        if (primerID != NULL)
+        {
+            NodoID * temporal = primerID;
+            while (temporal != NULL)
+            {
+                if (temporal->id == id)
+                    return true;
+
+                temporal = temporal->siguiente;
+            }
+            return false;
+        }
+
+        else
+            return false;
+    }
+};
+
 
 
 

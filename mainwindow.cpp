@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include <QFile>
 #include <QTextStream>
-#include <time.h>
 
 QStringList nombres;
 QStringList apellidos;
@@ -44,6 +43,7 @@ void MainWindow::arreglarPaises(){
         paisCorreo[pais.at(0)]=pais.at(1);
         paises[i]=pais[0];
     }
+
 }
 
 void MainWindow::showStartDialog(){
@@ -92,22 +92,18 @@ void Mundo::generarPersonas(int cant){
 
         Persona* nueva=new Persona(newId,nombre,apellido,pais,creencia,profesion,correo);
 
-        PersonaLista*aux=mundo->listaPrimero;
-        AVLtree<Persona*>*famila=new AVLtree<Persona*>;
+        NodoPersona*aux=mundo->listaPersonas->primeraPersona;
+        AVLtree<Persona*> * famila=new AVLtree<Persona*>;
         while (aux!=NULL) {
             Persona*auxDato=aux->dato;
             if(auxDato->apellido==apellido&&auxDato->pais==pais)
                 famila->insert(auxDato);
             aux=aux->siguiente;
         }
-        //todo: creo que el arbol de la familia no deberia ser un puntero, y si no, hay que borrar los datos.
-        //todo: hacer random para decidir random (0 iz, 1 este, 2 derecha), hacer lista para ver si este ya se testeo para ser hijo, hacer funcion para saber si es decendiente en pesona
 
-        srand(time(NULL));
-        int cantHijos=rand()%9;
-
-
-
+        //todo: random para saber la cantidad de hijos, hacer random para decidir random (0 iz, 1 este, 2 derecha), hacer lista para ver si este ya se testeo para ser hijo, hacer funcion para saber si es decendiente en pesona
+        
+        
 
     }
 }
