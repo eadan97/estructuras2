@@ -12,7 +12,7 @@ struct Persona
     QString profesion;
     QString correo;
     QDateTime nacimiento;
-    int pecados[7];
+    int pecados[7]={0,0,0,0,0,0,0};
     QVector <Persona*> hijos;
     int cantHijos;
 
@@ -44,7 +44,7 @@ struct Persona
 
     bool esNieto(Persona*aBuscar){
         for (int i=0; i<hijos.size(); ++i ) {
-            if(hijos[i].esHijo(aBuscar))
+            if(hijos[i]->esHijo(aBuscar))
                 return true;
         }
         return false;
@@ -81,39 +81,75 @@ struct PersonaLista
     {
         return (dato->id >= str.dato->id);
     }
+    int compare (const PersonaLista * a, const PersonaLista* b)
+    {
+      if ( *(PersonaLista*)a <  *(PersonaLista*)b ) return -1;
+      if ( *(PersonaLista*)a == *(PersonaLista*)b ) return 0;
+      if ( *(PersonaLista*)a >  *(PersonaLista*)b ) return 1;
+    }
 };
 
-/*struct PersonaArbol
+
+struct PersonaArbolNodo
 {
     PersonaLista*dato;
-    Persona*izquierdo;
-    Persona*derecho;
-    PersonaArbol(PersonaLista *personaLista) {
+    PersonaArbolNodo*izquierdo;
+    PersonaArbolNodo*derecho;
+    PersonaArbolNodo(PersonaLista *personaLista) {
         this->dato=personaLista;
     }
-};*/
+};
+
+struct PersonaArbol
+{
+    PersonaArbolNodo*raiz;
+    QVector<PersonaLista*> listaDelArbol;
+
+    void generarArbol(){
+        double logaritmo= log(listaDelArbol.size()+1)/log(2);//Logaritmo en base 2 de x+1
+        double intpart;
+        if( modf( logaritmo, &intpart) == 0){//Si el logaritmo dio un numero entero
+            qSort(listaDelArbol);
+            int medio = (listaDelArbol.size()-1)/2;
+            raiz=new PersonaArbolNodo(listaDelArbol[medio]);
+            agregarAlArbol(raiz,medio, medio);
+        }
+    }
+    void agregarAlArbol(PersonaArbolNodo*arbol, int dif, int pos){
+        dif=dif/2;
+        if(dif==0)
+            return;
+        arbol->izquierdo=new PersonaArbolNodo(listaDelArbol[pos-dif]);
+        arbol->derecho=new PersonaArbolNodo(listaDelArbol[pos+dif]);
+        agregarAlArbol(arbol->izquierdo,dif,pos-dif);
+        agregarAlArbol(arbol->derecho,dif,pos+dif);
+
+    }
+    PersonaArbol() {}
+};
+
 struct Mundo
 {
 
-    AVLtree<PersonaLista*> arbol;
+    PersonaArbol arbol;
     PersonaLista*listaPrimero;
     Mundo() {}
 
     void generarPersonas(int cant);
     //retorna la persona o la ultima hoja buscada
-    PersonaLista* encontrarPersonaEnArbol(AVLnode<PersonaLista*> *node, int id){
+    PersonaLista* encontrarPersonaEnArbol(PersonaArbolNodo *node, int id){
         if(node==NULL)
             return NULL;
-        else if(node->key->dato->id==id)
+        else if(node->dato->dato->id==id)
             return node->key;
-        else if(node->key->dato->id>id)
-            return (node->right==NULL)?node->key : encontrarPersonaEnArbol(node->right,id);
+        else if(node->dato->dato->id>id)
+            return (node->derecho==NULL)?node->dato : encontrarPersonaEnArbol(node->derecho,id);
         else if(node->key->dato->id<id)
-            return (node->left==NULL)?node->key : encontrarPersonaEnArbol(node->left,id);
+            return (node->izquierdo==NULL)?node->dato : encontrarPersonaEnArbol(node->izquierdo,id);
     }
 
     Persona* encontrarPersona(int id){
-        PersonaLista *aux=encontrarPersonaEnArbol(arbol.root,id);
+        PersonaLista *aux=encontrarPersonaEnArbol(arbol.raiz,id);
 
         if(aux->dato->id>id)
             while(aux->dato->id>id)
@@ -129,6 +165,9 @@ struct Mundo
 
     }
 
+    void crearArbol(){
+
+    }
 
 
 };
