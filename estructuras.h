@@ -2,6 +2,7 @@
 #define ESTRUCTURAS_H
 #include <QDateTime>
 #include<avl.h>
+using namespace std;
 struct Persona
 {
     int id;
