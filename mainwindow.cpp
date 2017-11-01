@@ -93,7 +93,7 @@ void Mundo::generarPersonas(int cant){
 
         Persona* nueva=new Persona(newId,nombre,apellido,pais,creencia,profesion,correo);
 
-        NodoPersona*auxPL=mundo->listaPersonas->primeraPersona;
+        NodoListaPersona*auxPL=mundo->listaPersonas->primeraPersona;
         AVLtree<Persona*>*familia=new AVLtree<Persona*>;
         while (auxPL!=NULL) {
             Persona*auxDato=auxPL->dato;

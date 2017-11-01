@@ -53,48 +53,48 @@ struct Persona
 
 };
 
-struct NodoPersona
+struct NodoListaPersona
 {
     Persona*dato;
-    NodoPersona*siguiente;
-    NodoPersona*anterior;
-    NodoPersona(Persona *persona) {
+    NodoListaPersona*siguiente;
+    NodoListaPersona*anterior;
+    NodoListaPersona(Persona *persona) {
         this->dato=persona;
     }
 
     //Para poder comparar 2 PersonaLista por el id de la persona contenida en dato
-    bool operator < (const NodoPersona& str) const
+    bool operator < (const NodoListaPersona& str) const
     {
         return (dato->id < str.dato->id);
     }
-    bool operator <= (const NodoPersona& str) const
+    bool operator <= (const NodoListaPersona& str) const
     {
         return (dato->id <= str.dato->id);
     }
-    bool operator == (const NodoPersona& str) const
+    bool operator == (const NodoListaPersona& str) const
     {
         return (dato->id == str.dato->id);
     }
-    bool operator > (const NodoPersona& str) const
+    bool operator > (const NodoListaPersona& str) const
     {
         return (dato->id > str.dato->id);
     }
-    bool operator >= (const NodoPersona& str) const
+    bool operator >= (const NodoListaPersona& str) const
     {
         return (dato->id >= str.dato->id);
     }
-    int compare (const NodoPersona * a, const NodoPersona* b)
+    int compare (const NodoListaPersona * a, const NodoListaPersona* b)
     {
-      if ( *(NodoPersona*)a <  *(NodoPersona*)b ) return -1;
-      if ( *(NodoPersona*)a == *(NodoPersona*)b ) return 0;
-      if ( *(NodoPersona*)a >  *(NodoPersona*)b ) return 1;
+      if ( *(NodoListaPersona*)a <  *(NodoListaPersona*)b ) return -1;
+      if ( *(NodoListaPersona*)a == *(NodoListaPersona*)b ) return 0;
+      if ( *(NodoListaPersona*)a >  *(NodoListaPersona*)b ) return 1;
     }
 };
 
 struct ListaPersonas
 {
-    NodoPersona * primeraPersona;
-    NodoPersona * ultimaPersona;
+    NodoListaPersona * primeraPersona;
+    NodoListaPersona * ultimaPersona;
 
     ListaPersonas()
     {
@@ -103,7 +103,7 @@ struct ListaPersonas
 
     void insertarAlInicio(Persona * nuevaPersona)
     {
-        NodoPersona * nueva = new NodoPersona(nuevaPersona);
+        NodoListaPersona * nueva = new NodoListaPersona(nuevaPersona);
 
         if (primeraPersona == NULL)
         {
@@ -120,7 +120,7 @@ struct ListaPersonas
 
     void insertarAlFinal(Persona * nuevaPersona)
     {
-        NodoPersona * nueva = new NodoPersona(nuevaPersona);
+        NodoListaPersona * nueva = new NodoListaPersona(nuevaPersona);
 
         if (primeraPersona == NULL)
         {
@@ -138,7 +138,7 @@ struct ListaPersonas
     //D: Función que inserta a una persona de forma ordenada.
     void insertarPersona(Persona * nuevaPersona)
     {
-        NodoPersona * nueva = new NodoPersona(nuevaPersona);
+        NodoListaPersona * nueva = new NodoListaPersona(nuevaPersona);
 
         if (primeraPersona > nueva || primeraPersona == NULL) //Persona con el ID más pequeño
         {
@@ -152,7 +152,7 @@ struct ListaPersonas
 
         else
         {
-            NodoPersona * temporal = primeraPersona;
+            NodoListaPersona * temporal = primeraPersona;
             while (temporal < nueva)
             {
                 temporal = temporal->siguiente;
@@ -166,7 +166,7 @@ struct ListaPersonas
 
     void imprimirPersonas()
     {
-        NodoPersona * temporal = primeraPersona;
+        NodoListaPersona * temporal = primeraPersona;
         while (temporal != NULL)
         {
             std::cout << "ID: " << temporal->dato->id << " " << "Nombre: " << temporal->dato->nombre.toStdString() << " " << temporal->dato->apellido.toStdString() << endl;
@@ -176,7 +176,7 @@ struct ListaPersonas
 
     int cantPersonas()
     {
-        NodoPersona * temporal = primeraPersona;
+        NodoListaPersona * temporal = primeraPersona;
         int contador = 0;
         while (temporal != NULL)
         {
@@ -186,11 +186,11 @@ struct ListaPersonas
         return contador;
     }
 
-    NodoPersona * buscarPersona(int id)
+    NodoListaPersona * buscarPersona(int id)
     {
         if (primeraPersona != NULL)
         {
-            NodoPersona * temporal = primeraPersona;
+            NodoListaPersona * temporal = primeraPersona;
 
             while (temporal != NULL)
             {
@@ -208,20 +208,20 @@ struct ListaPersonas
 
 };
 
-struct PersonaArbolNodo
+struct NodoArbolPersona
 {
-    NodoPersona*dato;
-    PersonaArbolNodo*izquierdo;
-    PersonaArbolNodo*derecho;
-    PersonaArbolNodo(NodoPersona *personaLista) {
+    NodoListaPersona*dato;
+    NodoArbolPersona*izquierdo;
+    NodoArbolPersona*derecho;
+    NodoArbolPersona(NodoListaPersona *personaLista) {
         this->dato=personaLista;
     }
 };
 
-struct PersonaArbol
+struct ArbolPersonas
 {
-    PersonaArbolNodo*raiz;
-    QVector<NodoPersona*> listaDelArbol;
+    NodoArbolPersona*raiz;
+    QVector<NodoListaPersona*> listaDelArbol;
 
     void generarArbol(){
         double logaritmo= log(listaDelArbol.size()+1)/log(2);//Logaritmo en base 2 de x+1
@@ -229,33 +229,33 @@ struct PersonaArbol
         if( modf( logaritmo, &intpart) == 0){//Si el logaritmo dio un numero entero
             qSort(listaDelArbol);
             int medio = (listaDelArbol.size()-1)/2;
-            raiz=new PersonaArbolNodo(listaDelArbol[medio]);
+            raiz=new NodoArbolPersona(listaDelArbol[medio]);
             agregarAlArbol(raiz,medio, medio);
         }
     }
-    void agregarAlArbol(PersonaArbolNodo*arbol, int dif, int pos){
+    void agregarAlArbol(NodoArbolPersona*arbol, int dif, int pos){
         dif=dif/2;
         if(dif==0)
             return;
-        arbol->izquierdo=new PersonaArbolNodo(listaDelArbol[pos-dif]);
-        arbol->derecho=new PersonaArbolNodo(listaDelArbol[pos+dif]);
+        arbol->izquierdo=new NodoArbolPersona(listaDelArbol[pos-dif]);
+        arbol->derecho=new NodoArbolPersona(listaDelArbol[pos+dif]);
         agregarAlArbol(arbol->izquierdo,dif,pos-dif);
         agregarAlArbol(arbol->derecho,dif,pos+dif);
 
     }
-    PersonaArbol() {}
+    ArbolPersonas() {}
 };
 
 struct Mundo
 {
 
-    PersonaArbol arbol;
+    ArbolPersonas arbol;
     ListaPersonas * listaPersonas;
     Mundo() {}
 
     void generarPersonas(int cant);
     //retorna la persona o la ultima hoja buscada
-    NodoPersona* encontrarPersonaEnArbol(PersonaArbolNodo *node, int id){
+    NodoListaPersona* encontrarPersonaEnArbol(NodoArbolPersona *node, int id){
         if(node==NULL)
             return NULL;
         else if(node->dato->dato->id==id)
@@ -267,7 +267,7 @@ struct Mundo
     }
 
     Persona* encontrarPersona(int id){
-        NodoPersona *aux=encontrarPersonaEnArbol(arbol.raiz,id);
+        NodoListaPersona *aux=encontrarPersonaEnArbol(arbol.raiz,id);
 
         if(aux->dato->id>id)
             while(aux->dato->id>id)
@@ -331,7 +331,7 @@ struct Mundo
     //R: Ninguna
     void sumarPecadosAMundo()
     {
-        NodoPersona * temporal = listaPersonas->primeraPersona;
+        NodoListaPersona * temporal = listaPersonas->primeraPersona;
         while (temporal != NULL)
         {
             sumarPecadosAPersona(temporal->dato);
