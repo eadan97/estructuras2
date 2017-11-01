@@ -223,7 +223,7 @@ struct ArbolPersonas
     NodoArbolPersona*raiz;
     QVector<NodoListaPersona*> listaDelArbol;
 
-    void generarArbol(){
+    bool generarArbol(){
         double logaritmo= log(listaDelArbol.size()+1)/log(2);//Logaritmo en base 2 de x+1
         double intpart;
         if( modf( logaritmo, &intpart) == 0){//Si el logaritmo dio un numero entero
@@ -231,7 +231,9 @@ struct ArbolPersonas
             int medio = (listaDelArbol.size()-1)/2;
             raiz=new NodoArbolPersona(listaDelArbol[medio]);
             agregarAlArbol(raiz,medio, medio);
+            return true;
         }
+        return false;
     }
     void agregarAlArbol(NodoArbolPersona*arbol, int dif, int pos){
         dif=dif/2;
@@ -266,7 +268,7 @@ struct Mundo
             return (node->izquierdo==NULL)?node->dato : encontrarPersonaEnArbol(node->izquierdo,id);
     }
 
-    Persona* encontrarPersona(int id){
+    NodoListaPersona* encontrarPersona(int id){
         NodoListaPersona *aux=encontrarPersonaEnArbol(arbol.raiz,id);
 
         if(aux->dato->id>id)
@@ -277,13 +279,30 @@ struct Mundo
                 aux=aux->siguiente;
 
         if(aux->dato->id==id)
-            return aux->dato;
+            return aux;
         else
             return NULL;
 
     }
 
     void crearArbol(){
+        arbol=ArbolPersonas();
+        QVector<int> ids;
+        int cantPersonasAlArbol=listaPersonas->cantPersonas()/100;
+        while(!(cantPersonasAlArbol<0&&arbol.generarArbol())){
+            int id=-1;
+            NodoListaPersona*persona=encontrarPersona(id);
+            while(persona==NULL&&ids.indexOf(id)!=-1){
+                srand(time(NULL));
+                id=rand()%10000000;
+                persona=encontrarPersona(id);
+            }
+
+            arbol.listaDelArbol+=persona;
+            ids+=id;
+            cantPersonasAlArbol-=1;
+
+        }
 
     }
 

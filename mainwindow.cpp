@@ -102,7 +102,6 @@ void Mundo::generarPersonas(int cant){
             auxPL=auxPL->siguiente;
         }
         //todo: creo que el arbol de la familia no deberia ser un puntero, y si no, hay que borrar los datos.
-        //hacer random para decidir random (0 iz, 1 este, 2 derecha)
         srand(time(NULL));
         int cantHijos=rand()%9;
         AVLnode<Persona*>*aux=familia->root;
@@ -124,7 +123,6 @@ void Mundo::generarPersonas(int cant){
             cantHijos-=1;
         }
 
-        //todo: random para saber la cantidad de hijos, hacer random para decidir random (0 iz, 1 este, 2 derecha), hacer lista para ver si este ya se testeo para ser hijo, hacer funcion para saber si es decendiente en pesona
         
         
 
