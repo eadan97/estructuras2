@@ -1,261 +1,39 @@
 #ifndef ESTRUCTURAS_H
 #define ESTRUCTURAS_H
 #include <QDateTime>
-#include<avl.h>
+#include <persona.h>
+#include <listapersonas.h>
+#include <arbolpersonas.h>
+#include <avl.h>
+#include<thread>
+#include<QDebug>
 using namespace std;
-struct Persona
-{
-    int id;
-    QString nombre;
-    QString apellido;
-    QString pais;
-    QString creencia;
-    QString profesion;
-    QString correo;
-    QDateTime nacimiento;
-    int pecados[7]={0,0,0,0,0,0,0};
-    QVector <Persona*> hijos;
-    int cantHijos;
-
-
-    Persona(int id, QString nombre, QString apellido, QString pais, QString creencia, QString profesion, QString correo) {
-        this->id=id;
-        this->nombre=nombre;
-        this->apellido=apellido;
-        this->pais=pais;
-        this->creencia=creencia;
-        this->profesion=profesion;
-        this->nacimiento=QDateTime::currentDateTime();
-        this->correo=correo;
-    }
-
-    bool esDescendiente(Persona*aBuscar){
-        if(esHijo(aBuscar)||esNieto(aBuscar))
-            return true;
-        return false;
-    }
-
-    bool esHijo(Persona*aBuscar){
-        for (int i=0; i<hijos.size(); ++i ) {
-            if(aBuscar==hijos[i])
-                return true;
-        }
-        return false;
-    }
-
-    bool esNieto(Persona*aBuscar){
-        for (int i=0; i<hijos.size(); ++i ) {
-            if(hijos[i]->esHijo(aBuscar))
-                return true;
-        }
-        return false;
-    }
-
-};
-
-struct NodoListaPersona
-{
-    Persona*dato;
-    NodoListaPersona*siguiente;
-    NodoListaPersona*anterior;
-    NodoListaPersona(Persona *persona) {
-        this->dato=persona;
-    }
-
-    //Para poder comparar 2 PersonaLista por el id de la persona contenida en dato
-    bool operator < (const NodoListaPersona& str) const
-    {
-        return (dato->id < str.dato->id);
-    }
-    bool operator <= (const NodoListaPersona& str) const
-    {
-        return (dato->id <= str.dato->id);
-    }
-    bool operator == (const NodoListaPersona& str) const
-    {
-        return (dato->id == str.dato->id);
-    }
-    bool operator > (const NodoListaPersona& str) const
-    {
-        return (dato->id > str.dato->id);
-    }
-    bool operator >= (const NodoListaPersona& str) const
-    {
-        return (dato->id >= str.dato->id);
-    }
-    int compare (const NodoListaPersona * a, const NodoListaPersona* b)
-    {
-      if ( *(NodoListaPersona*)a <  *(NodoListaPersona*)b ) return -1;
-      if ( *(NodoListaPersona*)a == *(NodoListaPersona*)b ) return 0;
-      if ( *(NodoListaPersona*)a >  *(NodoListaPersona*)b ) return 1;
-    }
-};
-
-struct ListaPersonas
-{
-    NodoListaPersona * primeraPersona;
-    NodoListaPersona * ultimaPersona;
-
-    ListaPersonas()
-    {
-        primeraPersona = ultimaPersona = NULL;
-    }
-
-    void insertarAlInicio(Persona * nuevaPersona)
-    {
-        NodoListaPersona * nueva = new NodoListaPersona(nuevaPersona);
-
-        if (primeraPersona == NULL)
-        {
-            primeraPersona = ultimaPersona = nueva;
-        }
-
-        else
-        {
-            primeraPersona->anterior = nueva;
-            primeraPersona->anterior->siguiente = primeraPersona;
-            primeraPersona = primeraPersona->anterior;
-        }
-    }
-
-    void insertarAlFinal(Persona * nuevaPersona)
-    {
-        NodoListaPersona * nueva = new NodoListaPersona(nuevaPersona);
-
-        if (primeraPersona == NULL)
-        {
-            primeraPersona = ultimaPersona = nueva;
-        }
-
-        else
-        {
-            ultimaPersona->siguiente = nueva;
-            ultimaPersona->siguiente->anterior = ultimaPersona;
-            ultimaPersona = ultimaPersona->siguiente;
-        }
-    }
-
-    //D: Función que inserta a una persona de forma ordenada.
-    void insertarPersona(Persona * nuevaPersona)
-    {
-        NodoListaPersona * nueva = new NodoListaPersona(nuevaPersona);
-
-        if (primeraPersona > nueva || primeraPersona == NULL) //Persona con el ID más pequeño
-        {
-            insertarAlInicio(nuevaPersona);
-        }
-
-        else if (ultimaPersona < nueva) //Persona con el ID más grande
-        {
-            insertarAlFinal(nuevaPersona);
-        }
-
-        else
-        {
-            NodoListaPersona * temporal = primeraPersona;
-            while (temporal < nueva)
-            {
-                temporal = temporal->siguiente;
-            }
-            temporal->anterior->siguiente = nueva;
-            nueva->siguiente = temporal;
-            nueva->anterior = temporal->anterior;
-            temporal->anterior = nueva;
-        }
-    }
-
-    void imprimirPersonas()
-    {
-        NodoListaPersona * temporal = primeraPersona;
-        while (temporal != NULL)
-        {
-            std::cout << "ID: " << temporal->dato->id << " " << "Nombre: " << temporal->dato->nombre.toStdString() << " " << temporal->dato->apellido.toStdString() << endl;
-            temporal = temporal->siguiente;
-        }
-    }
-
-    int cantPersonas()
-    {
-        NodoListaPersona * temporal = primeraPersona;
-        int contador = 0;
-        while (temporal != NULL)
-        {
-            contador++;
-            temporal = temporal->siguiente;
-        }
-        return contador;
-    }
-
-    NodoListaPersona * buscarPersona(int id)
-    {
-        if (primeraPersona != NULL)
-        {
-            NodoListaPersona * temporal = primeraPersona;
-
-            while (temporal != NULL)
-            {
-                if (temporal->dato->id == id)
-                    return temporal;
-
-                temporal = temporal->siguiente;
-            }
-            return NULL;
-        }
-
-        else
-            return NULL;
-    }
-
-};
-
-struct NodoArbolPersona
-{
-    NodoListaPersona*dato;
-    NodoArbolPersona*izquierdo;
-    NodoArbolPersona*derecho;
-    NodoArbolPersona(NodoListaPersona *personaLista) {
-        this->dato=personaLista;
-    }
-};
-
-struct ArbolPersonas
-{
-    NodoArbolPersona*raiz;
-    QVector<NodoListaPersona*> listaDelArbol;
-
-    bool generarArbol(){
-        double logaritmo= log(listaDelArbol.size()+1)/log(2);//Logaritmo en base 2 de x+1
-        double intpart;
-        if( modf( logaritmo, &intpart) == 0){//Si el logaritmo dio un numero entero
-            qSort(listaDelArbol);
-            int medio = (listaDelArbol.size()-1)/2;
-            raiz=new NodoArbolPersona(listaDelArbol[medio]);
-            agregarAlArbol(raiz,medio, medio);
-            return true;
-        }
-        return false;
-    }
-    void agregarAlArbol(NodoArbolPersona*arbol, int dif, int pos){
-        dif=dif/2;
-        if(dif==0)
-            return;
-        arbol->izquierdo=new NodoArbolPersona(listaDelArbol[pos-dif]);
-        arbol->derecho=new NodoArbolPersona(listaDelArbol[pos+dif]);
-        agregarAlArbol(arbol->izquierdo,dif,pos-dif);
-        agregarAlArbol(arbol->derecho,dif,pos+dif);
-
-    }
-    ArbolPersonas() {}
-};
 
 struct Mundo
 {
 
-    ArbolPersonas arbol;
-    ListaPersonas * listaPersonas;
+    ArbolPersonas *arbol= new ArbolPersonas();
+    ListaPersonas * listaPersonas = new ListaPersonas;
+    QList<int> ids;
     Mundo() {}
 
-    void generarPersonas(int cant);
+    void agregarPersona(Persona* persona){
+        listaPersonas->insertarPersona(persona);
+        ids+=persona->id;
+    }
+
+    void generarPersona();
+    void generarPersonas(int cant){
+        std::vector<std::thread> ts;
+        for(int i=0;i<cant;++i){
+            //ts.push_back(std::thread([=]{this->generarPersona();}));
+            generarPersona();
+            qDebug()<<(ids.size());
+        }
+        crearArbol();
+
+        //for (auto& th : ts) th.join();
+    }
     //retorna la persona o la ultima hoja buscada
     NodoListaPersona* encontrarPersonaEnArbol(NodoArbolPersona *node, int id){
         if(node==NULL)
@@ -269,40 +47,61 @@ struct Mundo
     }
 
     NodoListaPersona* encontrarPersona(int id){
-        NodoListaPersona *aux=encontrarPersonaEnArbol(arbol.raiz,id);
+        NodoListaPersona *aux=encontrarPersonaEnArbol(arbol->raiz,id);
+        if(aux==NULL||aux->dato==NULL)
+            aux = listaPersonas->primeraPersona;
 
-        if(aux->dato->id>id)
-            while(aux->dato->id>id)
-                aux=aux->anterior;
-        else if(aux->dato->id<id)
-            while(aux->dato->id<id)
-                aux=aux->siguiente;
-
-        if(aux->dato->id==id)
+        if (aux->dato->id == id)
             return aux;
-        else
+
+        if(aux->dato->id<id){
+            while (aux != NULL)
+            {
+                if (aux->dato->id == id)
+                    return aux;
+
+                aux = aux->siguiente;
+            }
             return NULL;
+        }
+
+        else if(aux->dato->id>id){
+            while (aux != NULL)
+            {
+                if (aux->dato->id == id)
+                    return aux;
+
+                aux = aux->anterior;
+            }
+            return NULL;
+        }
 
     }
 
     void crearArbol(){
-        arbol=ArbolPersonas();
-        QVector<int> ids;
-        int cantPersonasAlArbol=listaPersonas->cantPersonas()/100;
-        while(!(cantPersonasAlArbol<0&&arbol.generarArbol())){
-            int id=-1;
+        arbol==NULL;
+        arbol=new ArbolPersonas();//hacer arbol nuevo
+        QList<int> idsEnArbol;//ids que estan en el arbol
+        int cantPersonasAlArbol=listaPersonas->cantPersonas()/100;//1%
+
+        /*if(cantPersonasAlArbol==0)
+            cantPersonasAlArbol+=1;*/
+        bool hayArbol=false;
+        do{ //Si no se ha generado el arbol y si no se ha llegado a la cantidad deseada
+            //srand(time(NULL));
+            int sub=rand()% ids.size();
+            int id=ids[sub];//id a seleccionar
+
             NodoListaPersona*persona=encontrarPersona(id);
-            while(persona==NULL&&ids.indexOf(id)!=-1){
-                srand(time(NULL));
-                id=rand()%10000000;
-                persona=encontrarPersona(id);
+
+
+            if(idsEnArbol.indexOf(id)==-1){//si no esta en el arbol
+                arbol->listaDelArbol+=persona;//agregarlo al arbol
+                idsEnArbol+=id;
+                cantPersonasAlArbol-=1;
             }
-
-            arbol.listaDelArbol+=persona;
-            ids+=id;
-            cantPersonasAlArbol-=1;
-
-        }
+            hayArbol=arbol->generarArbol();
+        }while(cantPersonasAlArbol>0||!(hayArbol));
 
     }
 
@@ -333,7 +132,7 @@ struct Mundo
     void sumarPecadosAPersona(Persona * persona)
     {
         int aleatorio;
-        srand (time(NULL));
+        //srand (time(NULL));
         for (int i = 0; i < 7 ; i++)
         {
             aleatorio = rand() % 100;

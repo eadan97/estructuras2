@@ -3,10 +3,11 @@
 
 int main(int argc, char *argv[])
 {
+    srand(time(NULL));
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    w.showStartDialog();
+    w.afterLoad();
 
     return a.exec();
 }

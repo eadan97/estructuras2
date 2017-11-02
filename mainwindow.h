@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public slots:
-    void showStartDialog();
+    void afterLoad();
 
 public:
     explicit MainWindow(QWidget *parent = 0);

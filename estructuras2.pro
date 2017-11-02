@@ -32,7 +32,10 @@ HEADERS += \
         mainwindow.h \
     startdialog.h \
     estructuras.h \
-    avl.h
+    avl.h \
+    listapersonas.h \
+    arbolpersonas.h \
+    persona.h
 
 FORMS += \
         mainwindow.ui \
