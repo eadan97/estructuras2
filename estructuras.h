@@ -122,7 +122,7 @@ struct Mundo
 
             for (int j = 0 ; j < 7 ; j++)
             {
-                hijoActual->pecados[j] = persona->pecados[j] / 2;
+                hijoActual->pecados[j] += persona->pecados[j] / 2;
             }
 
         }
