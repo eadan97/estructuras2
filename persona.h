@@ -55,6 +55,28 @@ struct Persona
         return false;
     }
 
+
+
+    bool operator < (const Persona& str) const
+    {
+        return (id < str.id);
+    }
+    bool operator <= (const Persona& str) const
+    {
+        return (id <= str.id);
+    }
+    bool operator == (const Persona& str) const
+    {
+        return (id == str.id);
+    }
+    bool operator > (const Persona& str) const
+    {
+        return (id > str.id);
+    }
+    bool operator >= (const Persona& str) const
+    {
+        return (id >= str.id);
+    }
 };
 
 #endif // PERSONA_H

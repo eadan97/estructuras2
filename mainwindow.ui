@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>400</height>
+    <width>1091</width>
+    <height>679</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,14 +19,14 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>331</width>
-      <height>211</height>
+      <width>181</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="title">
      <string>Deus Dashboard</string>
     </property>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="btnGenerarPersonas">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -39,9 +39,232 @@
       <string>Generar</string>
      </property>
     </widget>
+    <widget class="QSpinBox" name="spnGenerarPersonas">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>20</y>
+       <width>81</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="suffix">
+      <string> personas</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>181</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Diabolus Dashboard</string>
+    </property>
+    <widget class="QPushButton" name="btnAgregarPecados">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>161</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Make them sin</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>431</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Pecados de familia</string>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ID del humano:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtPecadosFamiliaID">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>20</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnPecadosFamilia">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>150</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Buscar</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tblPecadosFamilia">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>411</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nombre</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Lujuria</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Gula</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Avaricia</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Pereza</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Ira</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Envidia</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Soberbia</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>211</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Top 10 - Paises mas pecadores</string>
+    </property>
+    <widget class="QListWidget" name="lstPaisesMasPecadores">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>191</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="movement">
+      <enum>QListView::Snap</enum>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>340</y>
+      <width>211</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Top 5 - Paises menos pecadores</string>
+    </property>
+    <widget class="QListWidget" name="lstPaisesMenosPecadores">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>191</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="movement">
+      <enum>QListView::Snap</enum>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_6">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>10</y>
+      <width>241</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>GroupBox</string>
+    </property>
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>221</width>
+       <height>111</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

@@ -171,12 +171,12 @@ bool AVLtree<T>::insert(T key) {
             *parent;
 
         while (true) {
-            if (n->key == key)
+            if (*(n->key) == *key)
                 return false;
 
             parent = n;
 
-            bool goLeft = n->key > key;
+            bool goLeft = *(n->key) > *key;
             n = goLeft ? n->left : n->right;
 
             if (n == NULL) {
@@ -210,8 +210,8 @@ void AVLtree<T>::deleteKey(const T delKey) {
     while (child != NULL) {
         parent = n;
         n = child;
-        child = delKey >= n->key ? n->right : n->left;
-        if (delKey == n->key)
+        child = *delKey >= *(n->key) ? n->right : n->left;
+        if (*delKey == *(n->key))
             delNode = n;
     }
 
@@ -220,7 +220,7 @@ void AVLtree<T>::deleteKey(const T delKey) {
 
         child = n->left != NULL ? n->left : n->right;
 
-        if (root->key == delKey) {
+        if (*(root->key) == *delKey) {
             root = child;
         }
         else {

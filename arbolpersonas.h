@@ -1,5 +1,6 @@
 #ifndef ARBOLPERSONAS_H
 #define ARBOLPERSONAS_H
+#include <algorithm>
 
 struct NodoArbolPersona
 {
@@ -22,7 +23,10 @@ struct ArbolPersonas
             double logaritmo= log(listaDelArbol.size()+1)/log(2);//Logaritmo en base 2 de x+1
             double intpart;
             if( modf( logaritmo, &intpart) == 0){//Si el logaritmo dio un numero entero
-                qSort(listaDelArbol);
+                std::sort(listaDelArbol.begin(),listaDelArbol.end(), [](NodoListaPersona * a, NodoListaPersona * b){
+                    return *a < *b;
+                });
+                //qSort(listaDelArbol);
                 int medio = (listaDelArbol.size()-1)/2;
                 raiz=new NodoArbolPersona(listaDelArbol[medio]);
                 agregarAlArbol(raiz,(listaDelArbol.size()+1)/2, medio);

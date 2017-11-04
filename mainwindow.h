@@ -21,6 +21,13 @@ public:
 
 
 
+private slots:
+    void on_btnGenerarPersonas_clicked();
+
+    void on_btnAgregarPecados_clicked();
+
+    void on_btnPecadosFamilia_clicked();
+
 private:
     Ui::MainWindow *ui;
 

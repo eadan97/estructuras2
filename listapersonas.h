@@ -105,7 +105,7 @@ struct ListaPersonas
         else
         {
             NodoListaPersona * temporal = primeraPersona;
-            while (temporal->dato->id < nueva->dato->id)
+            while (*temporal < *nueva)
             {
                 temporal = temporal->siguiente;
             }

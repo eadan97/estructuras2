@@ -79,7 +79,7 @@ struct Mundo
     }
 
     void crearArbol(){
-        arbol==NULL;
+        arbol=NULL;
         arbol=new ArbolPersonas();//hacer arbol nuevo
         QList<int> idsEnArbol;//ids que estan en el arbol
         int cantPersonasAlArbol=listaPersonas->cantPersonas()/100;//1%
@@ -135,7 +135,7 @@ struct Mundo
         //srand (time(NULL));
         for (int i = 0; i < 7 ; i++)
         {
-            aleatorio = rand() % 100;
+            aleatorio = rand() % 101;
             persona->pecados[i] = aleatorio;
 
         }

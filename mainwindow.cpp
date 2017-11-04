@@ -21,6 +21,18 @@ MainWindow::MainWindow(QWidget *parent) :
     //PersonaLista*pl=new PersonaLista(p);
 
     ui->setupUi(this);
+
+    ui->tblPecadosFamilia->setColumnWidth(0, 40);
+    ui->tblPecadosFamilia->setColumnWidth(1, 70);
+    ui->tblPecadosFamilia->setColumnWidth(2, 70);
+    ui->tblPecadosFamilia->setColumnWidth(3, 50);
+    ui->tblPecadosFamilia->setColumnWidth(4, 70);
+    ui->tblPecadosFamilia->setColumnWidth(5, 70);
+    ui->tblPecadosFamilia->setColumnWidth(6, 40);
+    ui->tblPecadosFamilia->setColumnWidth(7, 70);
+    ui->tblPecadosFamilia->setColumnWidth(8, 70);
+
+
     startDialog=new StartDialog(this);
     mundo=new Mundo();
 }
@@ -74,7 +86,6 @@ void MainWindow::afterLoad(){
     //procesarArchivo(profesiones,startDialog->fileProfesiones);
 
     mundo->generarPersonas(10000);
-
 }
 
 MainWindow::~MainWindow()
@@ -148,4 +159,24 @@ void Mundo::generarPersona(){
         aux=familia->root;
     }
 
+}
+
+
+void MainWindow::on_btnGenerarPersonas_clicked()
+{
+    int cantidad = ui->spnGenerarPersonas->value();
+    ui->spnGenerarPersonas->setValue(0);
+    mundo->generarPersonas(cantidad);
+
+}
+
+void MainWindow::on_btnAgregarPecados_clicked()
+{
+    mundo->sumarPecadosAMundo();
+
+}
+
+void MainWindow::on_btnPecadosFamilia_clicked()
+{
+    int id = ui->txtPecadosFamiliaID->text().toInt();
 }
