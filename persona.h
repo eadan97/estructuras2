@@ -56,6 +56,16 @@ struct Persona
         return false;
     }
 
+    int sumatoriaDePecados()
+    {
+        int sumatoria = 0;
+        for (int i = 0 ; i < 7 ; i++)
+        {
+            sumatoria += pecados[i];
+        }
+        return sumatoria;
+    }
+
 
 
     bool operator < (const Persona& str) const

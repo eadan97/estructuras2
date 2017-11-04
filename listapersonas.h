@@ -1,12 +1,15 @@
 #ifndef LISTAPERSONAS_H
 #define LISTAPERSONAS_H
 #include <iostream>
+#include "persona.h"
+
 //Estructura de los nodos de la lista de personas
 struct NodoListaPersona
 {
     Persona*dato;
     NodoListaPersona*siguiente=NULL;
     NodoListaPersona*anterior=NULL;
+
     NodoListaPersona(Persona *persona) {
         this->dato=persona;
     }
