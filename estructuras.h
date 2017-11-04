@@ -5,8 +5,8 @@
 #include <listapersonas.h>
 #include <arbolpersonas.h>
 #include <avl.h>
-#include<thread>
-#include<QDebug>
+#include <thread>
+#include <QDebug>
 using namespace std;
 
 struct Mundo

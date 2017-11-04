@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFile>
 #include <QTextStream>
+#include <QMessageBox>
 #include <time.h>
 #include <thread>
 
@@ -12,6 +13,25 @@ QHash<QString, QString> paisCorreo;
 QStringList creencias;
 QStringList profesiones;
 Mundo* mundo;
+
+QStringList pecadosPersonaToQStringList(Persona*persona){
+    QStringList res;
+
+    res<<QString::number(persona->id);
+    res<<persona->nombre;
+    res[1]+=" ";
+    res[1]+=persona->apellido;
+    res<<QString::number(persona->pecados[0]);
+    res<<QString::number(persona->pecados[1]);
+    res<<QString::number(persona->pecados[2]);
+    res<<QString::number(persona->pecados[3]);
+    res<<QString::number(persona->pecados[4]);
+    res<<QString::number(persona->pecados[5]);
+    res<<QString::number(persona->pecados[6]);
+
+    return res;
+}
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -86,6 +106,10 @@ void MainWindow::afterLoad(){
     //procesarArchivo(profesiones,startDialog->fileProfesiones);
 
     mundo->generarPersonas(10000);
+
+    for(int i=0; i<mundo->ids.size(); ++i){
+        qDebug()<<mundo->encontrarPersona(mundo->ids[i])->dato->id << "-" << mundo->encontrarPersona(mundo->ids[i])->dato->hijos.size();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -178,5 +202,37 @@ void MainWindow::on_btnAgregarPecados_clicked()
 
 void MainWindow::on_btnPecadosFamilia_clicked()
 {
+    QTableWidget *tbl=ui->tblPecadosFamilia;
+    tbl->setRowCount(0);
     int id = ui->txtPecadosFamiliaID->text().toInt();
+
+    NodoListaPersona * persona=mundo->encontrarPersona(id);
+    if(persona!=NULL){
+    agregarATablaPecadosFamilia(tbl,pecadosPersonaToQStringList(persona->dato));
+
+    for (int i =0; i<persona->dato->hijos.size(); ++i) {
+        agregarATablaPecadosFamilia(tbl,pecadosPersonaToQStringList(persona->dato->hijos[i]));
+        for (int j=0; j<persona->dato->hijos[i]->hijos.size(); ++j) {
+            agregarATablaPecadosFamilia(tbl,pecadosPersonaToQStringList(persona->dato->hijos[i]->hijos[j]));
+        }
+    }
+    }
+    else{
+        QMessageBox::critical(this, tr("Error"), tr("El ID digitado no pertenece a ninguna persona del mundo."));
+    }
+
+}
+void MainWindow::agregarATablaPecadosFamilia(QTableWidget*tbl, QStringList lista){
+    //QTableWidget*tbl=ui->tblPecadosFamilia;
+    int lastRow=tbl->rowCount();
+    tbl->setRowCount(lastRow+1);
+    for(int i=0; i<lista.size(); ++i){
+        tbl->setItem(lastRow,i,new QTableWidgetItem(lista[i]));
+    }
+
+
+}
+
+void MainWindow::refrescarTopsPecadores(){
+
 }

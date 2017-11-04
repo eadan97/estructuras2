@@ -1,5 +1,6 @@
 #ifndef PERSONA_H
 #define PERSONA_H
+#include <QString>
 //Estructura de Persona
 struct Persona
 {

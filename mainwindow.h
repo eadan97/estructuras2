@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <startdialog.h>
 #include <estructuras.h>
+#include <QTableWidget>
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +28,7 @@ private slots:
     void on_btnAgregarPecados_clicked();
 
     void on_btnPecadosFamilia_clicked();
+    void agregarATablaPecadosFamilia(QTableWidget * tbl, QStringList lista);
 
 private:
     Ui::MainWindow *ui;
@@ -36,7 +38,7 @@ private:
     void procesarArchivo(QStringList&list,QString fileDir);
     void arreglarPaises();
 
-
+    void refrescarTopsPecadores();
 };
 
 #endif // MAINWINDOW_H
