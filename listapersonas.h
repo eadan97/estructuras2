@@ -119,6 +119,36 @@ struct ListaPersonas
         }
     }
 
+    //D: Función para insertar una persona de forma ordenada, basándose en la cantidad de pecados. Los inserta de forma descendente
+    void insertarPorPecados(Persona * nuevaPersona)
+    {
+        NodoListaPersona * nueva = new NodoListaPersona(nuevaPersona);
+
+        if (primeraPersona == NULL||primeraPersona->dato->sumatoriaDePecados() < nueva->dato->sumatoriaDePecados()) //Persona con más pecados
+        {
+            insertarAlInicio(nuevaPersona);
+        }
+
+        else if (ultimaPersona->dato->sumatoriaDePecados() > nueva->dato->sumatoriaDePecados()) //Persona con menos pecados
+        {
+            insertarAlFinal(nuevaPersona);
+        }
+
+        else
+        {
+            NodoListaPersona * temporal = primeraPersona;
+            while (temporal->dato->sumatoriaDePecados() > nueva->dato->sumatoriaDePecados())
+            {
+                temporal = temporal->siguiente;
+            }
+            temporal->anterior->siguiente = nueva;
+            nueva->siguiente = temporal;
+            nueva->anterior = temporal->anterior;
+            temporal->anterior = nueva;
+        }
+
+    }
+
     void imprimirPersonas()
     {
         NodoListaPersona * temporal = primeraPersona;
@@ -140,6 +170,29 @@ struct ListaPersonas
             temporal = temporal->siguiente;
         }
         return contador;
+    }
+
+    NodoListaPersona * borrarAlInicio()
+    {
+        if (primeraPersona == NULL)
+            return NULL;
+
+        else if (primeraPersona == ultimaPersona)
+        {
+            NodoListaPersona * borrado = primeraPersona;
+            primeraPersona = ultimaPersona = NULL;
+            return borrado;
+        }
+
+        else
+        {
+            NodoListaPersona * borrado = primeraPersona;
+            primeraPersona = primeraPersona->siguiente;
+            primeraPersona->anterior = 0;
+            borrado->siguiente = 0;
+
+            return borrado;
+        }
     }
 
     /*
