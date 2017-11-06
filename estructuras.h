@@ -28,7 +28,6 @@ struct Mundo
         for(int i=0;i<cant;++i){
             //ts.push_back(std::thread([=]{this->generarPersona();}));
             generarPersona();
-            qDebug()<<(ids.size());
         }
         crearArbol();
 

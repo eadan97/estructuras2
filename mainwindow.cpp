@@ -10,9 +10,10 @@ QStringList nombres;
 QStringList apellidos;
 QStringList paises;
 QHash<QString, QString> paisCorreo;
+QHash<QString, int> paisPecados;
 QStringList creencias;
 QStringList profesiones;
-Mundo* mundo;
+Mundo* mundo;//EL mundo
 
 QStringList pecadosPersonaToQStringList(Persona*persona){
     QStringList res;
