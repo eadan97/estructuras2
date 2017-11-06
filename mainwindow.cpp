@@ -66,8 +66,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
     startDialog=new StartDialog(this);
     mundo=new Mundo();
+
 }
 
+QList<Persona *> personasPorContinente(QString continente)
+{
+    QList<Persona *> personas;
+    NodoListaPersona * temporal = mundo->listaPersonas->primeraPersona;
+    while (temporal != NULL)
+    {
+        if (paisContinente[temporal->dato->pais].compare(continente) == 0)
+            personas.append(temporal->dato);
+
+        temporal = temporal->siguiente;
+    }
+    return personas;
+}
 
 void MainWindow::procesarArchivo(QStringList &list, QString fileDir){
     QFile file(fileDir);

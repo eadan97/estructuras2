@@ -116,7 +116,7 @@ struct Mundo
 
     void sumarPecadosANietos(QVector<Persona*> hijos)
     {
-        for (int i = 0 ; i < hijos.size() ; i++)
+        for (int i = 0 ; i < hijos.size() ; ++i)
         {
             sumarPecadosAHijos(hijos.at(i));
         }
