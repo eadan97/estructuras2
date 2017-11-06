@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -35,8 +36,15 @@ HEADERS += \
     avl.h \
     listapersonas.h \
     arbolpersonas.h \
-    persona.h
+    persona.h \
+    heap.h \
+    hilo.h
 
 FORMS += \
         mainwindow.ui \
     startdialog.ui
+
+DISTFILES +=
+
+RESOURCES += \
+    resources.qrc

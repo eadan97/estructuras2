@@ -39,6 +39,8 @@ private:
     void arreglarPaises();
 
     void refrescarTopsPecadores();
+    void pintarMapa();
+
 };
 
 #endif // MAINWINDOW_H

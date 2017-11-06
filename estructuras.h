@@ -13,7 +13,7 @@ using namespace std;
 struct Infierno
 {
     ListaPersonas * listaPersonas;
-    Heap * heapInfierno = new Heap;
+    //Heap * heapInfierno = new Heap();
     AVLtree<Persona*> * arbolInfierno = new AVLtree<Persona*>;
 
 };

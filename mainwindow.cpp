@@ -5,15 +5,25 @@
 #include <QMessageBox>
 #include <time.h>
 #include <thread>
+#include <QPainter>
+#include <QBitmap>
+#include <QtPrintSupport/qprinter.h>
 
 QStringList nombres;
 QStringList apellidos;
 QStringList paises;
-QHash<QString, QString> paisCorreo;
+QHash<QString, QString> continenteCorreo;
+QHash<QString, QString> paisContinente;
 QHash<QString, int> paisPecados;
+QHash<QString, int> contPecados;
 QStringList creencias;
 QStringList profesiones;
 Mundo* mundo;//EL mundo
+//continenteCorreo["Africa"]="hacercorreo@pls.com";
+
+
+
+
 
 QStringList pecadosPersonaToQStringList(Persona*persona){
     QStringList res;
@@ -75,7 +85,7 @@ void MainWindow::procesarArchivo(QStringList &list, QString fileDir){
 void MainWindow::arreglarPaises(){
     for(int i=0; i<paises.size(); ++i){
         QStringList pais=paises.at(i).split(',');
-        paisCorreo[pais.at(0)]=pais.at(1);
+        paisContinente[pais.at(0)]=pais.at(1);
         paises[i]=pais[0];
     }
 
@@ -108,9 +118,14 @@ void MainWindow::afterLoad(){
 
     mundo->generarPersonas(10000);
 
+
     for(int i=0; i<mundo->ids.size(); ++i){
         qDebug()<<mundo->encontrarPersona(mundo->ids[i])->dato->id << "-" << mundo->encontrarPersona(mundo->ids[i])->dato->hijos.size();
     }
+
+    //ui->lblMapa->colorMap();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -141,7 +156,7 @@ void Mundo::generarPersona(){
     //srand (time(NULL));
     QString profesion=profesiones[rand()%profesiones.size()];
 
-    QString correo=paisCorreo[pais];
+    QString correo=paisContinente[pais];
 
     Persona* nueva=new Persona(newId,nombre,apellido,pais,creencia,profesion,correo);
 
@@ -186,6 +201,85 @@ void Mundo::generarPersona(){
 
 }
 
+void contarPecados(){
+    NodoListaPersona*aux=mundo->listaPersonas->primeraPersona;
+    paisPecados.clear();
+    contPecados.clear();
+    while(aux!=NULL){
+        int pecados = aux->dato->pecados[0];
+        pecados += aux->dato->pecados[1];
+        pecados += aux->dato->pecados[2];
+        pecados += aux->dato->pecados[3];
+        pecados += aux->dato->pecados[4];
+        pecados += aux->dato->pecados[5];
+        pecados += aux->dato->pecados[6];
+
+        paisPecados[aux->dato->pais]=paisPecados[aux->dato->pais]+pecados;
+        contPecados[aux->dato->correo]=paisPecados[aux->dato->pais]+pecados;
+        aux=aux->siguiente;
+    }
+}
+
+void MainWindow::pintarMapa(){
+    QPixmap px( ":/mapa2.png" );
+    QColor asia(255,0,255);//Asia
+    QColor euro(0,255,255);//Europa
+    QColor ocea(0,0,255);//Oceania
+    QColor afri(255,165,0);//Africa
+    QColor nort(255,255,0);//NA
+    QColor sura(0,128,0);//SA
+    QColor anta(255,0,0);//Antartica
+
+    QPixmap mAsia=px.createMaskFromColor( asia, Qt::MaskOutColor ) ;
+    QPixmap mEuro=px.createMaskFromColor( euro, Qt::MaskOutColor ) ;
+    QPixmap mOcea=px.createMaskFromColor( ocea, Qt::MaskOutColor ) ;
+    QPixmap mAfri=px.createMaskFromColor( afri, Qt::MaskOutColor ) ;
+    QPixmap mNort=px.createMaskFromColor( nort, Qt::MaskOutColor ) ;
+    QPixmap mSou=px.createMaskFromColor( sura, Qt::MaskOutColor ) ;
+    QPixmap mAnta=px.createMaskFromColor( anta, Qt::MaskOutColor ) ;
+
+    int pecadosTotales=0;
+    QList<int> vals = contPecados.values();
+
+    foreach (int val, vals) {
+        pecadosTotales+=val;
+    }
+    float aFloat;
+
+    QPainter p(&px);
+    aFloat=1/(pecadosTotales/(255*(float)contPecados["Asia"]));
+    p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
+    p.drawPixmap(px.rect(), mAsia, mAsia.rect());
+    //p.end();
+    aFloat=1/(pecadosTotales/(255*(float)contPecados["Europe"]));
+
+    p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
+    p.drawPixmap(px.rect(), mEuro, mEuro.rect());
+    aFloat=1/(pecadosTotales/(255*(float)contPecados["Oceania"]));
+
+    p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
+    p.drawPixmap(px.rect(), mOcea, mOcea.rect());
+    aFloat=1/(pecadosTotales/(255*(float)contPecados["Africa"]));
+
+    p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
+    p.drawPixmap(px.rect(), mAfri, mAfri.rect());
+    aFloat=1/(pecadosTotales/(255*(float)contPecados["North America"]));
+
+    p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
+    p.drawPixmap(px.rect(), mNort, mNort.rect());
+    aFloat=1/(pecadosTotales/(255*(float)contPecados["South America"]));
+
+    p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
+    p.drawPixmap(px.rect(), mSou, mSou.rect());
+
+    p.setPen(QColor(0, 0, 0));
+    p.drawPixmap(px.rect(), mAnta, mAnta.rect());
+
+
+    p.end();
+
+    ui->lblMapa->setPixmap(px);
+}
 
 void MainWindow::on_btnGenerarPersonas_clicked()
 {
@@ -198,6 +292,10 @@ void MainWindow::on_btnGenerarPersonas_clicked()
 void MainWindow::on_btnAgregarPecados_clicked()
 {
     mundo->sumarPecadosAMundo();
+    contarPecados();
+    refrescarTopsPecadores();
+    pintarMapa();
+
 
 }
 
@@ -234,6 +332,39 @@ void MainWindow::agregarATablaPecadosFamilia(QTableWidget*tbl, QStringList lista
 
 }
 
-void MainWindow::refrescarTopsPecadores(){
 
+
+void MainWindow::refrescarTopsPecadores(){
+    ui->lstPaisesMenosPecadores->clear();
+    ui->lstPaisesMasPecadores->clear();
+
+    //Ordenar lista de PaisPecados
+    QList<int> vals = paisPecados.values(); //Valores
+    std::sort( vals.begin(), vals.end() ); //Ordenados
+
+    foreach( int val, vals )
+    {
+        QList<QString> keys = paisPecados.keys( val );
+        std::sort( keys.begin(), keys.end() );
+
+        foreach( QString key, keys )
+        {
+            ui->lstPaisesMenosPecadores->addItem(QString("%1 - %2").arg(key).arg(val));
+        }
+        if(ui->lstPaisesMenosPecadores->count()==5)
+            break;
+    }
+
+    for(int i=vals.count()-1;i>vals.count()-12;--i){
+        int val = vals.at(i);
+        QList<QString> keys = paisPecados.keys( val );
+        std::sort( keys.begin(), keys.end() );
+
+        foreach( QString key, keys )
+        {
+            ui->lstPaisesMasPecadores->addItem(QString("%1 - %2").arg(key).arg(val));
+        }
+        if(ui->lstPaisesMasPecadores->count()==10)
+            break;
+    }
 }
