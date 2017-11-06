@@ -7,11 +7,21 @@
 #include <avl.h>
 #include <thread>
 #include <QDebug>
+#include "heap.h"
 using namespace std;
+
+struct Infierno
+{
+    ListaPersonas * listaPersonas;
+    Heap * heapInfierno = new Heap;
+    AVLtree<Persona*> * arbolInfierno = new AVLtree<Persona*>;
+
+};
+
 
 struct Mundo
 {
-
+    Infierno  * infierno;
     ArbolPersonas *arbol= new ArbolPersonas();
     ListaPersonas * listaPersonas = new ListaPersonas;
     QList<int> ids;
@@ -190,7 +200,6 @@ struct Mundo
         return pecadoresOrdenados;
     }
 
-
     //D: Función que retorna una QList con los punteros al 25% más pecador de un país
     //E: Un país (QString)
     //S: Una QList con los punteros al 25% más pecador de un país
@@ -209,6 +218,14 @@ struct Mundo
         return masPecadores;
     }
 
+    void agregarPecadoresAInfierno(QString pais)
+    {
+        QList<Persona * > * pecadores = masPecadoresDePais(pais);
+        for (int i = 0 ; i < pecadores->size() ; i++)
+        {
+            infierno->listaPersonas->insertarPersona(pecadores->at(i));
+        }
+    }
 };
 
 struct NodoID
@@ -318,14 +335,6 @@ struct ListaIDS
         else
             return false;
     }
-};
-
-struct Infierno
-{
-    ListaPersonas * listaPersonas;
-    AVLtree<Persona*> * arbolInfierno = new AVLtree<Persona*>;
-
-
 };
 
 
