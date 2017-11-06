@@ -125,7 +125,7 @@ struct Mundo
     void sumarPecadosAHijos(Persona * persona)
     {
 
-        for (int i = 0; i < persona->hijos.size() ; i++)
+        for (int i = 0; i < persona->hijos.size() ; ++i)
         {
             Persona * hijoActual = persona->hijos.at(i);
 
