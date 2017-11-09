@@ -7,25 +7,101 @@
 #include <avl.h>
 #include <thread>
 #include <QDebug>
-#include "heap.h"
+#include <heap.h>
 using namespace std;
 
 struct Infierno
 {
-    ListaPersonas * listaPersonas;
+    ListaPersonas * listaPersonas=new ListaPersonas();
     //Heap * heapInfierno = new Heap();
-    AVLtree<Persona*> * arbolInfierno = new AVLtree<Persona*>;
+    AVLtree<NodoListaPersona*> * arbol = new AVLtree<NodoListaPersona*>;
+
+    NodoListaPersona*encontrarPersona(int id){
+        NodoListaPersona*aux=encontrarPersonaEnArbol(arbol->root, id);
+
+        if(aux==NULL||aux->dato==NULL)
+            aux = listaPersonas->primeraPersona;
+
+        if (aux->dato->id == id)
+            return aux;
+
+        if(aux->dato->id<id){
+            while (aux != NULL)
+            {
+                if (aux->dato->id == id)
+                    return aux;
+
+                aux = aux->siguiente;
+            }
+            return NULL;
+        }
+
+        else if(aux->dato->id>id){
+            while (aux != NULL)
+            {
+                if (aux->dato->id == id)
+                    return aux;
+
+                aux = aux->anterior;
+            }
+            return NULL;
+        }
+
+
+    }
+
+    template <class T>
+    NodoListaPersona* encontrarPersonaEnArbol(AVLnode<T> *node, int id){
+        if(node==NULL)
+            return NULL;
+        else if(node->key->dato->id==id)
+            return node->key;
+        else if(node->key->dato->id>id)
+            return (node->right==NULL)?node->key : encontrarPersonaEnArbol(node->right,id);
+        else if(node->key->dato->id<id)
+            return (node->left==NULL)?node->key : encontrarPersonaEnArbol(node->left,id);
+    }
+
+
+    void crearArbol(){
+        arbol=NULL;
+        arbol=new AVLtree<NodoListaPersona*>;//hacer arbol nuevo
+        QList<int> idsEnArbol;//ids que estan en el arbol
+        int cantPersonasAlArbol=listaPersonas->cantPersonas();
+        cantPersonasAlArbol/=100;//1%
+
+        if(cantPersonasAlArbol==0)
+            cantPersonasAlArbol++;
+
+
+        do{ //Si no se ha generado el arbol y si no se ha llegado a la cantidad deseada
+            //srand(time(NULL));
+            int id=rand()% 10000000;
+            if(idsEnArbol.indexOf(id)==-1){//si no esta en el arbol
+                idsEnArbol+=id;
+                NodoListaPersona*persona=encontrarPersona(id);
+                if(persona!=NULL){
+                    arbol->insert(persona);//agregarlo al arbol
+                    cantPersonasAlArbol-=1;
+                }
+            }
+
+        }while(cantPersonasAlArbol>0);
+
+    }
 
 };
 
 
 struct Mundo
 {
-    Infierno  * infierno;
+    Infierno  * infierno=new Infierno();
     ArbolPersonas *arbol= new ArbolPersonas();
     ListaPersonas * listaPersonas = new ListaPersonas;
     QList<int> ids;
-    Mundo() {}
+    Mundo() {
+
+    }
 
     void agregarPersona(Persona* persona){
         listaPersonas->insertarPersona(persona);
@@ -193,7 +269,7 @@ struct Mundo
     ListaPersonas * ordenarPecadoresDePais(QList<Persona *> personas)
     {
         ListaPersonas * pecadoresOrdenados;
-        for (int i = 0 ; i < personas.size() ; i++)
+        for (int i = 0 ; i < personas.size() ; ++i)
         {
             pecadoresOrdenados->insertarPorPecados(personas[i]);
         }
@@ -210,7 +286,7 @@ struct Mundo
         int cantPersonasPais = personasDePais(pais).size();
         int veintiCincoPorCiento = cantPersonasPais * 0.25; //asumiendo que ya está redondeado
         ListaPersonas * pecadores = ordenarPecadoresDePais(personasDePais(pais));
-        for (int i = 0; i < veintiCincoPorCiento ; i++)
+        for (int i = 0; i < veintiCincoPorCiento ; ++i)
         {
             masPecadores->append(pecadores->primeraPersona->dato);
             pecadores->borrarAlInicio();
@@ -220,122 +296,34 @@ struct Mundo
 
     void agregarPecadoresAInfierno(QString pais)
     {
-        QList<Persona * > * pecadores = masPecadoresDePais(pais);
-        for (int i = 0 ; i < pecadores->size() ; i++)
-        {
-            infierno->listaPersonas->insertarPersona(pecadores->at(i));
+        QList<Persona * > listaParaHeap = personasDePais(pais);
+
+        HeapPecados heap=HeapPecados();
+
+        foreach (Persona*var, listaParaHeap) {
+            heap.insert(var);
         }
+
+        int cantidad25=heap.getSize()*0.25;
+
+
+
+
+        for (int i = 0 ; i < cantidad25+1 ; ++i)
+        {
+            Persona*aux=heap.remove();
+            listaPersonas->borrarPersona(aux->id);
+            ids.removeAll(aux->id);
+            infierno->listaPersonas->insertarPersona(aux);
+            //guardar persona condenada
+        }
+        infierno->crearArbol();
+        crearArbol();
+        //TODO: enviar correo
     }
 };
 
-struct NodoID
-{
-    int id;
-    NodoID * siguiente;
-    NodoID * anterior;
 
-    NodoID(int id)
-    {
-        this->id = id;
-        siguiente = anterior = NULL;
-    }
-};
-
-struct ListaIDS
-{
-    NodoID * primerID;
-    NodoID * ultimoID;
-
-    ListaIDS()
-    {
-        primerID = ultimoID = NULL;
-    }
-
-    void insertarAlInicio(int idNuevo)
-    {
-        NodoID * nuevo = new NodoID(idNuevo);
-
-        if (primerID == NULL)
-        {
-            primerID = ultimoID = nuevo;
-        }
-
-        else
-        {
-            primerID->anterior = nuevo;
-            primerID->anterior->siguiente = primerID;
-            primerID = primerID->anterior;
-        }
-    }
-
-    void insertarAlFinal(int idNuevo)
-    {
-        NodoID * nuevo = new NodoID(idNuevo);
-
-        if (primerID == NULL)
-        {
-            primerID = ultimoID = nuevo;
-        }
-
-        else
-        {
-            ultimoID->siguiente = nuevo;
-            ultimoID->siguiente->anterior = ultimoID;
-            ultimoID = ultimoID->siguiente;
-        }
-    }
-
-    void insertarID(int idNuevo)
-    {
-        if (!yaExiste(idNuevo))
-        {
-            NodoID * nuevo = new NodoID(idNuevo);
-
-            if (primerID->id > idNuevo)
-            {
-                insertarAlInicio(idNuevo);
-            }
-
-            else if (ultimoID->id < idNuevo)
-            {
-                insertarAlFinal(idNuevo);
-            }
-
-            else
-            {
-                NodoID * temporal = primerID;
-                while(temporal->id < idNuevo)
-                {
-                    temporal = temporal->siguiente;
-                }
-                temporal->anterior->siguiente = nuevo;
-                nuevo->siguiente = temporal;
-                nuevo->anterior = temporal->anterior;
-                temporal->anterior = nuevo;
-            }
-        }
-
-    }
-
-    bool yaExiste(int id)
-    {
-        if (primerID != NULL)
-        {
-            NodoID * temporal = primerID;
-            while (temporal != NULL)
-            {
-                if (temporal->id == id)
-                    return true;
-
-                temporal = temporal->siguiente;
-            }
-            return false;
-        }
-
-        else
-            return false;
-    }
-};
 
 
 

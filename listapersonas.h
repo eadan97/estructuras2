@@ -119,6 +119,18 @@ struct ListaPersonas
         }
     }
 
+    Persona* borrarPersona(int borrarPersonaID){
+        NodoListaPersona *aux= buscarPersona(borrarPersonaID);
+        if(aux!=NULL){
+            aux->anterior->siguiente=aux->siguiente;
+            aux->siguiente->anterior=aux->anterior;
+            aux->siguiente=NULL;
+            aux->anterior=NULL;
+            return aux->dato;
+        }
+        return NULL;
+
+    }
     //D: Función para insertar una persona de forma ordenada, basándose en la cantidad de pecados. Los inserta de forma descendente
     void insertarPorPecados(Persona * nuevaPersona)
     {

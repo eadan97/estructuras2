@@ -1,3 +1,5 @@
+#ifndef AVL_H
+#define AVL_H
 #include <iostream>
 
 /* AVL node */
@@ -241,3 +243,4 @@ void AVLtree<T>::printBalance() {
     printBalance(root);
     std::cout << std::endl;
 }
+#endif

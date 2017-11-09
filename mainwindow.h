@@ -30,6 +30,8 @@ private slots:
     void on_btnPecadosFamilia_clicked();
     void agregarATablaPecadosFamilia(QTableWidget * tbl, QStringList lista);
 
+    void on_btnCondenarPais_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -43,4 +45,4 @@ private:
 
 };
 
-#endif // MAINWINDOW_H
+#endif

@@ -368,3 +368,11 @@ void MainWindow::refrescarTopsPecadores(){
             break;
     }
 }
+
+void MainWindow::on_btnCondenarPais_clicked()
+{
+    mundo->agregarPecadoresAInfierno(ui->txtPaisACondenar->text());
+    contarPecados();
+    refrescarTopsPecadores();
+    pintarMapa();
+}
