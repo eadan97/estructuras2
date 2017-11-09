@@ -220,12 +220,24 @@ struct Mundo
 
     void agregarPecadoresAInfierno(QString pais)
     {
-        QList<Persona * > * pecadores = masPecadoresDePais(pais);
-        for (int i = 0 ; i < pecadores->size() ; i++)
+        QList<Persona *> personas = personasDePais(pais);
+        //hacemos un for para meterlas al heap uno a uno(?)
+        int cuantosAlInfierno = personas.size() * 0.25;
+
+        int cuantosEnInfierno = 0;
+        while (cuantosAlInfierno != cuantosEnInfierno)
         {
-            infierno->listaPersonas->insertarPersona(pecadores->at(i));
+            //Persona * aInsertar = heap.remove;
+            //Infierno.arbolInfierno.insertar(aInsertar);
+            //Infierno.listaPersonas.insertarPersona(aInsertar);
+            cuantosEnInfierno++;
         }
+        //Función de enviar correos(?);
     }
+
+
+
+
 };
 
 struct NodoID
