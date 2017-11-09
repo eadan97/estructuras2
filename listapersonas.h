@@ -218,6 +218,16 @@ struct ListaPersonas
             return NULL;
     }
 
+    NodoListaPersona * borrarPersona(int id)
+    {
+        NodoListaPersona * buscado = buscarPersona(id);
+        buscado->anterior->siguiente = buscado->siguiente;
+        buscado->siguiente->anterior = buscado->anterior;
+        return buscado;
+    }
+
+
+
 };
 
 

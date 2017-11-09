@@ -209,8 +209,8 @@ struct Mundo
         QList <Persona *> * masPecadores;
         int cantPersonasPais = personasDePais(pais).size();
         int veintiCincoPorCiento = cantPersonasPais * 0.25; //asumiendo que ya está redondeado
-        ListaPersonas * pecadores = ordenarPecadoresDePais(personasDePais(pais));
-        for (int i = 0; i < veintiCincoPorCiento ; i++)
+        ListaPersonas * pecadores = ordenarPecadores(personasDePais(pais));
+        for (int i = 0; i < veintiCincoPorCiento ; ++i)
         {
             masPecadores->append(pecadores->primeraPersona->dato);
             pecadores->borrarAlInicio();
@@ -235,7 +235,20 @@ struct Mundo
         //Función de enviar correos(?);
     }
 
+    void agregarAlParaiso(int idAleatorio)
+    {
+        if (!listaDeSalvados->contains(idAleatorio))
+        {
+            listaDeSalvados->append(idAleatorio);
+            if(listaPersonas->buscarPersona(idAleatorio) != NULL)
+            {
 
+            }
+        }
+
+        cout << "La persona con el ID: " << idAleatorio << " ya fue salvada" << endl;
+
+    }
 
 
 };
