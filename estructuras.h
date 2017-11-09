@@ -307,6 +307,8 @@ struct Mundo
         int cantidad25=heap.getSize()*0.25;
 
 
+        if (cantidad25==0)
+            return;
 
 
         for (int i = 0 ; i < cantidad25+1 ; ++i)

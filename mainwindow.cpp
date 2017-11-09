@@ -21,10 +21,6 @@ QStringList profesiones;
 Mundo* mundo;//EL mundo
 //continenteCorreo["Africa"]="hacercorreo@pls.com";
 
-
-
-
-
 QStringList pecadosPersonaToQStringList(Persona*persona){
     QStringList res;
 
@@ -43,6 +39,20 @@ QStringList pecadosPersonaToQStringList(Persona*persona){
     return res;
 }
 
+QStringList personaToQStringList(Persona*persona){
+    QStringList res;
+    res<<QString::number(persona->id);
+    res<<persona->nombre;
+    res<<persona->apellido;
+    res<<persona->pais;
+    res<<persona->creencia;
+    res<<persona->profesion;
+    res<<persona->correo;
+    res<<persona->nacimiento.toString();
+    res<<QString::number(persona->sumatoriaDePecados());
+    res<<QString::number(persona->hijos.count());
+    return res;
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -321,12 +331,12 @@ void MainWindow::on_btnPecadosFamilia_clicked()
 
     NodoListaPersona * persona=mundo->encontrarPersona(id);
     if(persona!=NULL){
-    agregarATablaPecadosFamilia(tbl,pecadosPersonaToQStringList(persona->dato));
+    agregarATable(tbl,pecadosPersonaToQStringList(persona->dato));
 
     for (int i =0; i<persona->dato->hijos.size(); ++i) {
-        agregarATablaPecadosFamilia(tbl,pecadosPersonaToQStringList(persona->dato->hijos[i]));
+        agregarATable(tbl,pecadosPersonaToQStringList(persona->dato->hijos[i]));
         for (int j=0; j<persona->dato->hijos[i]->hijos.size(); ++j) {
-            agregarATablaPecadosFamilia(tbl,pecadosPersonaToQStringList(persona->dato->hijos[i]->hijos[j]));
+            agregarATable(tbl,pecadosPersonaToQStringList(persona->dato->hijos[i]->hijos[j]));
         }
     }
     }
@@ -335,7 +345,7 @@ void MainWindow::on_btnPecadosFamilia_clicked()
     }
 
 }
-void MainWindow::agregarATablaPecadosFamilia(QTableWidget*tbl, QStringList lista){
+void MainWindow::agregarATable(QTableWidget*tbl, QStringList lista){
     //QTableWidget*tbl=ui->tblPecadosFamilia;
     int lastRow=tbl->rowCount();
     tbl->setRowCount(lastRow+1);
@@ -389,4 +399,15 @@ void MainWindow::on_btnCondenarPais_clicked()
     contarPecados();
     refrescarTopsPecadores();
     pintarMapa();
+    refrescarPersonasEnIniferno();
+}
+
+void MainWindow::refrescarPersonasEnIniferno(){
+    QTableWidget*tbl=ui->tblPersonasEnInfierno;
+    tbl->setRowCount(0);
+    NodoListaPersona*aux=mundo->infierno->listaPersonas->primeraPersona;
+    while(aux!=NULL){
+        agregarATable(tbl,personaToQStringList(aux->dato));
+        aux=aux->siguiente;
+    }
 }

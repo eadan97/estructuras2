@@ -28,7 +28,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     startdialog.cpp \
-    heap.cpp \
     hilo.cpp \
 
 HEADERS += \
