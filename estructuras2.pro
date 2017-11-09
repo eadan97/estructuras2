@@ -28,7 +28,8 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     startdialog.cpp \
-    heap.cpp
+    heap.cpp \
+    hilo.cpp \
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     arbolpersonas.h \
     persona.h \
     heap.h \
-    hilo.h
+    hilo.h \
+    persona.h \
 
 FORMS += \
         mainwindow.ui \
