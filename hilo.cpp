@@ -1,9 +1,9 @@
 #include "hilo.h"
 
-Hilo::Hilo(int segundos, QObject *parent)
+Hilo::Hilo(QObject *parent)
     : QThread(parent)
 {
-    misSegundos = segundos;
+
 }
 
 void Hilo::run()
@@ -21,6 +21,6 @@ void Hilo::run()
         aleatorio = rand() % 10000000;
         emit aleatorioDeSalvacion(aleatorio);
 
-        this->sleep(misSegundos);
+        this->sleep(segundos);
     }
 }

@@ -13,8 +13,9 @@ using namespace std;
 struct Infierno
 {
     ListaPersonas * listaPersonas=new ListaPersonas();
-    //Heap * heapInfierno = new Heap();
     AVLtree<NodoListaPersona*> * arbol = new AVLtree<NodoListaPersona*>;
+
+    Infierno(){}
 
     NodoListaPersona*encontrarPersona(int id){
         NodoListaPersona*aux=encontrarPersonaEnArbol(arbol->root, id);
@@ -92,9 +93,19 @@ struct Infierno
 
 };
 
+struct Paraiso
+{
+    AVLtree<NodoListaPersona*> * arbolParaiso = new AVLtree<NodoListaPersona*>;
+    AVLtree<int>  *arbolDeLaVida = new AVLtree<int>;
+    QList<int> * noNacidos;
+    QList<int> * salvados;
+
+    Paraiso (){}
+};
 
 struct Mundo
 {
+    Paraiso * paraiso;
     Infierno  * infierno=new Infierno();
     ArbolPersonas *arbol= new ArbolPersonas();
     ListaPersonas * listaPersonas = new ListaPersonas;
@@ -298,17 +309,36 @@ struct Mundo
 
     void agregarAlParaiso(int idAleatorio)
     {
-        /*if (!listaDeSalvados->contains(idAleatorio))
+        if (!paraiso->salvados->contains(idAleatorio))
         {
-            listaDeSalvados->append(idAleatorio);
-            if(listaPersonas->buscarPersona(idAleatorio) != NULL)
-            {
+            paraiso->salvados->append(idAleatorio);
 
+            if(listaPersonas->buscarPersona(idAleatorio) != NULL) //Si estaba vivo
+            {
+                NodoListaPersona * salvado = new NodoListaPersona(listaPersonas->borrarPersona(idAleatorio));
+                arbol->eliminarPersona(salvado);
+                paraiso->arbolParaiso->insert(salvado);
+                cout << "La persona con el ID: " << idAleatorio << " fue salvada desde la Tierra" << endl;
+
+            }
+
+            else if (infierno->listaPersonas->buscarPersona(idAleatorio) != NULL) // si está en el infierno
+            {
+                NodoListaPersona * salvado = new NodoListaPersona(infierno->listaPersonas->borrarPersona(idAleatorio));
+                infierno->arbol->deleteKey(salvado);
+                paraiso->arbolParaiso->insert(salvado);
+                cout << "La persona con el ID: " << idAleatorio << " fue salvada del Infierno" << endl;
+            }
+
+            else
+            {
+                paraiso->noNacidos->append(idAleatorio);
+                cout << "La persona con eL ID: " << idAleatorio << " no ha nacido, pero será salvada" << endl;
             }
         }
 
         cout << "La persona con el ID: " << idAleatorio << " ya fue salvada" << endl;
-*/
+
     }
     
 };

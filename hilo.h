@@ -8,10 +8,10 @@ class Hilo : public QThread
 {
     Q_OBJECT
 public:
-    Hilo(int segundos , QObject *parent = nullptr);
+    Hilo(QObject *parent = nullptr);
+    int segundos;
     void run();
     bool pausa;
-    int misSegundos;
 
 signals:
     void aleatorioDeSalvacion(int);

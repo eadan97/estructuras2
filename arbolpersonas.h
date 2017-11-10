@@ -45,6 +45,12 @@ struct ArbolPersonas
         agregarAlArbol(arbol->derecho,dif,pos+dif);
 
     }
+    void eliminarPersona(NodoListaPersona * persona)
+    {
+        listaDelArbol.removeAll(persona);
+        generarArbol();
+    }
+
     ArbolPersonas() {}
 };
 

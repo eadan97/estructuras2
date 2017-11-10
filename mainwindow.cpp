@@ -378,6 +378,7 @@ void MainWindow::on_btnPecadosFamilia_clicked()
     }
 
 }
+
 void MainWindow::agregarATable(QTableWidget*tbl, QStringList lista){
     //QTableWidget*tbl=ui->tblPecadosFamilia;
     int lastRow=tbl->rowCount();
@@ -388,7 +389,6 @@ void MainWindow::agregarATable(QTableWidget*tbl, QStringList lista){
 
 
 }
-
 
 
 void MainWindow::refrescarTopsPecadores(){
@@ -445,6 +445,19 @@ void MainWindow::refrescarPersonasEnIniferno(){
     }
 }
 
+void MainWindow :: agregarAlParaisoVentana(int aleatorio)
+{
+    ui->id_salvado->setText(QString::number(aleatorio));
+    mundo->agregarAlParaiso(aleatorio);
+}
+
+//Conecta el hilo con el slot.
+void MainWindow :: conectarHilo()
+{
+    hiloDeAleatorio = new Hilo(this);
+    hiloDeAleatorio->segundos = ui->secSalvacion->value();
+    connect (hiloDeAleatorio , SIGNAL(aleatorioDeSalvacion(int)) , this , SLOT(agregarAlParaisoVentana(int)) );
+}
 
 void Mundo::agregarPecadoresAInfierno(QString pais){
     QList<Persona * > listaParaHeap = personasDePais(pais);
@@ -496,4 +509,12 @@ void Mundo::agregarPecadoresAInfierno(QString pais){
     crearArbol();
 }
 
+void MainWindow::on_btnPlay_clicked()
+{
+    hiloDeAleatorio->pausa = false;
+}
 
+void MainWindow::on_btnPausa_clicked()
+{
+    hiloDeAleatorio->pausa = true;
+}
