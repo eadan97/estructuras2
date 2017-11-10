@@ -13,8 +13,9 @@ using namespace std;
 struct Infierno
 {
     ListaPersonas * listaPersonas=new ListaPersonas();
-    //Heap * heapInfierno = new Heap();
     AVLtree<NodoListaPersona*> * arbol = new AVLtree<NodoListaPersona*>;
+
+    Infierno(){}
 
     NodoListaPersona*encontrarPersona(int id){
         NodoListaPersona*aux=encontrarPersonaEnArbol(arbol->root, id);
@@ -92,9 +93,41 @@ struct Infierno
 
 };
 
+struct Paraiso
+{
+    AVLtree<Persona*> * arbolParaiso = new AVLtree<Persona*>;
+    AVLtree<int>  *arbolDeLaVida = new AVLtree<int>;
+    QList<int> * noNacidos = new QList<int>();
+    QList<int> * salvados = new QList<int>();
+    QList<Persona*>res;
+
+    Paraiso (){}
+    void resetearRes(){
+        res=QList<Persona*>();
+    }
+    void obtenerPersonas(AVLnode<Persona*>*n){
+        if (n != NULL) {
+            obtenerPersonas(n->left);
+                res.append(n->key);
+            obtenerPersonas(n->right);
+        }
+    }
+    void obtenerPersonasApellidoPais(AVLnode<Persona*>*n, QString apellido, QString pais){
+        if (n != NULL) {
+            obtenerPersonasApellidoPais(n->left, apellido, pais);
+            if(n->key->apellido.compare(apellido)==0&&n->key->pais.compare(pais)==0)
+                res.append(n->key);
+            obtenerPersonasApellidoPais(n->right, apellido, pais);
+        }
+    }
+    bool estaEnNoNacidos(int id){
+        return noNacidos->contains(id);
+    }
+};
 
 struct Mundo
 {
+    Paraiso * paraiso=new Paraiso();
     Infierno  * infierno=new Infierno();
     ArbolPersonas *arbol= new ArbolPersonas();
     ListaPersonas * listaPersonas = new ListaPersonas;
@@ -296,21 +329,7 @@ struct Mundo
 
     void agregarPecadoresAInfierno(QString pais);
 
-    void agregarAlParaiso(int idAleatorio)
-    {
-        /*if (!listaDeSalvados->contains(idAleatorio))
-        {
-            listaDeSalvados->append(idAleatorio);
-            if(listaPersonas->buscarPersona(idAleatorio) != NULL)
-            {
-
-            }
-        }
-
-        cout << "La persona con el ID: " << idAleatorio << " ya fue salvada" << endl;
-*/
-    }
-    
+    void agregarAlParaiso(int idAleatorio);
 };
 
 

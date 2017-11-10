@@ -122,8 +122,12 @@ struct ListaPersonas
     Persona* borrarPersona(int borrarPersonaID){
         NodoListaPersona *aux= buscarPersona(borrarPersonaID);
         if(aux!=NULL){
-            aux->anterior->siguiente=aux->siguiente;
-            aux->siguiente->anterior=aux->anterior;
+            if(aux->anterior!=NULL){
+                aux->anterior->siguiente=aux->siguiente;
+            }
+            if(aux->siguiente!=NULL){
+                aux->siguiente->anterior=aux->anterior;
+            }
             aux->siguiente=NULL;
             aux->anterior=NULL;
             return aux->dato;
