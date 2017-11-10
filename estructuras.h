@@ -285,7 +285,7 @@ struct Mundo
         QList <Persona *> * masPecadores;
         int cantPersonasPais = personasDePais(pais).size();
         int veintiCincoPorCiento = cantPersonasPais * 0.25; //asumiendo que ya está redondeado
-        ListaPersonas * pecadores = ordenarPecadores(personasDePais(pais));
+        ListaPersonas * pecadores = ordenarPecadoresDePais(personasDePais(pais));
         for (int i = 0; i < veintiCincoPorCiento ; ++i)
         {
             masPecadores->append(pecadores->primeraPersona->dato);
@@ -294,38 +294,11 @@ struct Mundo
         return masPecadores;
     }
 
-    void agregarPecadoresAInfierno(QString pais)
-    {
-        QList<Persona * > listaParaHeap = personasDePais(pais);
+    void agregarPecadoresAInfierno(QString pais);
 
-        HeapPecados heap=HeapPecados();
-
-        foreach (Persona*var, listaParaHeap) {
-            heap.insert(var);
-        }
-
-        int cantidad25=heap.getSize()*0.25;
-
-
-        if (cantidad25==0)
-            return;
-
-
-        for (int i = 0 ; i < cantidad25+1 ; ++i)
-        {
-            Persona*aux=heap.remove();
-            listaPersonas->borrarPersona(aux->id);
-            ids.removeAll(aux->id);
-            infierno->listaPersonas->insertarPersona(aux);
-            //guardar persona condenada
-        }
-        infierno->crearArbol();
-        crearArbol();
-        //TODO: enviar correo
-    }
     void agregarAlParaiso(int idAleatorio)
     {
-        if (!listaDeSalvados->contains(idAleatorio))
+        /*if (!listaDeSalvados->contains(idAleatorio))
         {
             listaDeSalvados->append(idAleatorio);
             if(listaPersonas->buscarPersona(idAleatorio) != NULL)
@@ -335,7 +308,7 @@ struct Mundo
         }
 
         cout << "La persona con el ID: " << idAleatorio << " ya fue salvada" << endl;
-
+*/
     }
     
 };

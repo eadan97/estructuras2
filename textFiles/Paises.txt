@@ -1,100 +1,100 @@
-China,Asia
-India,Asia
-United States,North America
-Indonesia,Asia
-Brazil,South America
-Pakistan,Asia
-Nigeria,Africa
-Bangladesh,Asia
-Russia,Europe
-Japan,Asia
-Mexico,North America
-Philippines,Asia
-Ethiopia,Africa
-Vietnam,Asia
-Egypt,Africa
-Germany,Europe
-Iran,Asia
-Turkey,Europe
-Democratic Republic of the Congo,Africa
-Thailand,Asia
-France,Europe
-United Kingdom,Europe
-Italy,Europe
-Myanmar,Asia
-South Africa,Africa
-Tanzania,Africa
-South Korea,Asia
-Colombia,South America
-Spain,Europe
-Kenya,Africa
-Ukraine,Europe
-Argentina,South America
-Sudan,Africa
-Algeria,Africa
-Uganda,Africa
-Poland,Europe
-Iraq,Asia
-Canada,North America
-Morocco,Africa
-Afghanistan,Asia
-Saudi Arabia,Asia
-Peru,South America
-Venezuela,South America
-Malaysia,Asia
-Uzbekistan,Asia
-Nepal,Asia
-Mozambique,Africa
-Ghana,Africa
-Yemen,Asia
-North Korea,Asia
-Angola,Africa
-Madagascar,Africa
-Australia,Oceania
-Taiwan,Asia
-Cameroon,Africa
-Cote d'Ivoire,Africa
-Sri Lanka,Asia
-Niger,Africa
-Romania,Europe
-Syria,Asia
-Burkina Faso,Africa
-Chile,South America
-Kazakhstan,Europe
-Mali,Africa
-Netherlands,Europe
-Malawi,Africa
-Guatemala,North America
-Zambia,Africa
-Ecuador,South America
-Cambodia,Asia
-Zimbabwe,Africa
-Senegal,Africa
-Chad,Africa
-Guinea,Africa
-South Sudan,Africa
-Rwanda,Africa
-Cuba,North America
-Belgium,Europe
-Tunisia,Africa
-Burundi,Africa
-Bolivia,South America
-Greece,Europe
-Benin,Africa
-Somalia,Africa
-Haiti,North America
-Czech Republic,Europe
-Dominican Republic,North America
-Portugal,Europe
-Hungary,Europe
-Sweden,Europe
-Azerbaijan,Asia
-Belarus,Europe
-Honduras,North America
-Austria,Europe
-Tajikistan,Asia
-Israel,Asia
-Switzerland,Europe
-Jordan,Asia
-Togo,Africa
-Bulgaria,Europe
+China,Asia,africaprogra2@gmail.com
+India,Asia,africaprogra2@gmail.com
+United States,North America,africaprogra2@gmail.com
+Indonesia,Asia,africaprogra2@gmail.com
+Brazil,South America,africaprogra2@gmail.com
+Pakistan,Asia,africaprogra2@gmail.com
+Nigeria,Africa,africaprogra2@gmail.com
+Bangladesh,Asia,africaprogra2@gmail.com
+Russia,Europe,africaprogra2@gmail.com
+Japan,Asia,africaprogra2@gmail.com
+Mexico,North America,africaprogra2@gmail.com
+Philippines,Asia,africaprogra2@gmail.com
+Ethiopia,Africa,africaprogra2@gmail.com
+Vietnam,Asia,africaprogra2@gmail.com
+Egypt,Africa,africaprogra2@gmail.com
+Germany,Europe,africaprogra2@gmail.com
+Iran,Asia,africaprogra2@gmail.com
+Turkey,Europe,africaprogra2@gmail.com
+Democratic Republic of the Congo,Africa,africaprogra2@gmail.com
+Thailand,Asia,africaprogra2@gmail.com
+France,Europe,africaprogra2@gmail.com
+United Kingdom,Europe,africaprogra2@gmail.com
+Italy,Europe,africaprogra2@gmail.com
+Myanmar,Asia,africaprogra2@gmail.com
+South Africa,Africa,africaprogra2@gmail.com
+Tanzania,Africa,africaprogra2@gmail.com
+South Korea,Asia,africaprogra2@gmail.com
+Colombia,South America,africaprogra2@gmail.com
+Spain,Europe,africaprogra2@gmail.com
+Kenya,Africa,africaprogra2@gmail.com
+Ukraine,Europe,africaprogra2@gmail.com
+Argentina,South America,africaprogra2@gmail.com
+Sudan,Africa,africaprogra2@gmail.com
+Algeria,Africa,africaprogra2@gmail.com
+Uganda,Africa,africaprogra2@gmail.com
+Poland,Europe,africaprogra2@gmail.com
+Iraq,Asia,africaprogra2@gmail.com
+Canada,North America,africaprogra2@gmail.com
+Morocco,Africa,africaprogra2@gmail.com
+Afghanistan,Asia,africaprogra2@gmail.com
+Saudi Arabia,Asia,africaprogra2@gmail.com
+Peru,South America,africaprogra2@gmail.com
+Venezuela,South America,africaprogra2@gmail.com
+Malaysia,Asia,africaprogra2@gmail.com
+Uzbekistan,Asia,africaprogra2@gmail.com
+Nepal,Asia,africaprogra2@gmail.com
+Mozambique,Africa,africaprogra2@gmail.com
+Ghana,Africa,africaprogra2@gmail.com
+Yemen,Asia,africaprogra2@gmail.com
+North Korea,Asia,africaprogra2@gmail.com
+Angola,Africa,africaprogra2@gmail.com
+Madagascar,Africa,africaprogra2@gmail.com
+Australia,Oceania,africaprogra2@gmail.com
+Taiwan,Asia,africaprogra2@gmail.com
+Cameroon,Africa,africaprogra2@gmail.com
+Cote d'Ivoire,Africa,africaprogra2@gmail.com
+Sri Lanka,Asia,africaprogra2@gmail.com
+Niger,Africa,africaprogra2@gmail.com
+Romania,Europe,africaprogra2@gmail.com
+Syria,Asia,africaprogra2@gmail.com
+Burkina Faso,Africa,africaprogra2@gmail.com
+Chile,South America,africaprogra2@gmail.com
+Kazakhstan,Europe,africaprogra2@gmail.com
+Mali,Africa,africaprogra2@gmail.com
+Netherlands,Europe,africaprogra2@gmail.com
+Malawi,Africa,africaprogra2@gmail.com
+Guatemala,North America,africaprogra2@gmail.com
+Zambia,Africa,africaprogra2@gmail.com
+Ecuador,South America,africaprogra2@gmail.com
+Cambodia,Asia,africaprogra2@gmail.com
+Zimbabwe,Africa,africaprogra2@gmail.com
+Senegal,Africa,africaprogra2@gmail.com
+Chad,Africa,africaprogra2@gmail.com
+Guinea,Africa,africaprogra2@gmail.com
+South Sudan,Africa,africaprogra2@gmail.com
+Rwanda,Africa,africaprogra2@gmail.com
+Cuba,North America,africaprogra2@gmail.com
+Belgium,Europe,africaprogra2@gmail.com
+Tunisia,Africa,africaprogra2@gmail.com
+Burundi,Africa,africaprogra2@gmail.com
+Bolivia,South America,africaprogra2@gmail.com
+Greece,Europe,africaprogra2@gmail.com
+Benin,Africa,africaprogra2@gmail.com
+Somalia,Africa,africaprogra2@gmail.com
+Haiti,North America,africaprogra2@gmail.com
+Czech Republic,Europe,africaprogra2@gmail.com
+Dominican Republic,North America,africaprogra2@gmail.com
+Portugal,Europe,africaprogra2@gmail.com
+Hungary,Europe,africaprogra2@gmail.com
+Sweden,Europe,africaprogra2@gmail.com
+Azerbaijan,Asia,africaprogra2@gmail.com
+Belarus,Europe,africaprogra2@gmail.com
+Honduras,North America,africaprogra2@gmail.com
+Austria,Europe,africaprogra2@gmail.com
+Tajikistan,Asia,africaprogra2@gmail.com
+Israel,Asia,africaprogra2@gmail.com
+Switzerland,Europe,africaprogra2@gmail.com
+Jordan,Asia,africaprogra2@gmail.com
+Togo,Africa,africaprogra2@gmail.com
+Bulgaria,Europe,africaprogra2@gmail.com

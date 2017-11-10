@@ -8,18 +8,50 @@
 #include <QPainter>
 #include <QBitmap>
 #include <QtPrintSupport/qprinter.h>
+#include "SmtpClient/src/SmtpMime";
+
 
 QStringList nombres;
 QStringList apellidos;
 QStringList paises;
-QHash<QString, QString> continenteCorreo;
+QHash<QString, QString> paisCorreo;
 QHash<QString, QString> paisContinente;
 QHash<QString, int> paisPecados;
 QHash<QString, int> contPecados;
 QStringList creencias;
 QStringList profesiones;
 Mundo* mundo;//EL mundo
-//continenteCorreo["Africa"]="hacercorreo@pls.com";
+
+void enviarCorreo(QString text, QString recipientMail, QString recipientName, QString subject){
+    QString email="sistemaprogra2@gmail.com";
+    QString password="darules123";
+
+    SmtpClient smtp("smtp.gmail.com", 465, SmtpClient::SslConnection);
+    smtp.setUser(email);
+    smtp.setPassword(password);
+    MimeMessage message;
+    message.setSender(new EmailAddress(email, "Sistema - Progra 2"));
+    message.addRecipient(new EmailAddress(recipientMail, recipientName));
+    message.setSubject(subject);
+    MimeHtml html;
+    html.setHtml(text);
+
+    message.addPart(&html);
+    // Now we can send the mail
+    if (!smtp.connectToHost()) {
+        qDebug() << "Failed to connect to host!" << endl;
+        return;
+    }
+    if (!smtp.login()) {
+        qDebug() << "Failed to login!" << endl;
+        return;
+    }
+    if (!smtp.sendMail(message)) {
+        qDebug() << "Failed to send mail!" << endl;
+        return;
+    }
+    smtp.quit();
+}
 
 QStringList pecadosPersonaToQStringList(Persona*persona){
     QStringList res;
@@ -110,6 +142,7 @@ void MainWindow::arreglarPaises(){
     for(int i=0; i<paises.size(); ++i){
         QStringList pais=paises.at(i).split(',');
         paisContinente[pais.at(0)]=pais.at(1);
+        paisCorreo[pais.at(0)]=pais.at(2);
         paises[i]=pais[0];
     }
 
@@ -180,7 +213,7 @@ void Mundo::generarPersona(){
     //srand (time(NULL));
     QString profesion=profesiones[rand()%profesiones.size()];
 
-    QString correo=paisContinente[pais];
+    QString correo=paisCorreo[pais];
 
     Persona* nueva=new Persona(newId,nombre,apellido,pais,creencia,profesion,correo);
 
@@ -411,3 +444,56 @@ void MainWindow::refrescarPersonasEnIniferno(){
         aux=aux->siguiente;
     }
 }
+
+
+void Mundo::agregarPecadoresAInfierno(QString pais){
+    QList<Persona * > listaParaHeap = personasDePais(pais);
+    HeapPecados heap=HeapPecados();
+    foreach (Persona*var, listaParaHeap) {
+        heap.insert(var);
+    }
+    int cantidad25=heap.getSize()*0.25;
+    if (cantidad25==0)
+        return;
+    QString html="<h1>Resumen de la condenacion</h1>";
+    html+="<table>";
+    html+="<tr>";
+    html+="<th>ID</th>";
+    html+="<th>Nombre</th>";
+    html+="<th>Apellido</th>";
+    html+="<th>Pais</th>";
+    html+="<th>Creencia</th>";
+    html+="<th>Profesion</th>";
+    html+="<th>Nacimiento</th>";
+    html+="<th>Cant. Pecados</th>";
+    html+="<th>Cant. Hijos</th>";
+    html+="</tr>";
+    QString correo=listaParaHeap.at(0)->correo, nombre=pais;
+    for (int i = 0 ; i < cantidad25+1 ; ++i)
+    {
+
+        Persona*aux=heap.remove();
+        ids.removeAll(aux->id);
+        infierno->listaPersonas->insertarPersona(aux);
+
+        html+="<tr>";
+        html+="<td>";html+=QString::number(aux->id);html+="</td>";
+        html+="<td>";html+=aux->nombre;html+="</td>";
+        html+="<td>";html+=aux->apellido;html+="</td>";
+        html+="<td>";html+=aux->pais;html+="</td>";
+        html+="<td>";html+=aux->creencia;html+="</td>";
+        html+="<td>";html+=aux->profesion;html+="</td>";
+        html+="<td>";html+=aux->nacimiento.toString();html+="</td>";
+        html+="<td>";html+=QString::number(aux->sumatoriaDePecados());html+="</td>";
+        html+="<td>";html+=QString::number(aux->hijos.count());html+="</td>";
+        html+="</tr>";
+        listaPersonas->borrarPersona(aux->id);
+    }
+    html+="</table>";
+
+    enviarCorreo(html, correo, nombre, "Resumen de condenacion");
+    infierno->crearArbol();
+    crearArbol();
+}
+
+
