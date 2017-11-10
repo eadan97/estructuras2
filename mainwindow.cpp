@@ -249,10 +249,10 @@ void Mundo::generarPersona(){
                 aux=(aux->right==NULL)?aux:aux->right;}
         }while(seleccion!=1);
 
-        if(!(aux->key->esDescendiente(nueva)||aux->key==nueva))
+        if(!(aux->key->esDescendiente(nueva)||aux->key==nueva)){
             nueva->hijos.append(aux->key);
+            cantHijos-=1;}
         familia->deleteKey(aux->key);
-        cantHijos-=1;
         aux=familia->root;
     }
 
