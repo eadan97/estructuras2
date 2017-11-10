@@ -9,7 +9,7 @@ class Hilo : public QThread
     Q_OBJECT
 public:
     Hilo(QObject *parent = nullptr);
-    int segundos;
+    int segundos=5;
     void run();
     bool pausa;
 

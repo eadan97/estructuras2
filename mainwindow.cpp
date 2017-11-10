@@ -10,7 +10,7 @@
 #include <QtPrintSupport/qprinter.h>
 #include "SmtpClient/src/SmtpMime";
 
-
+MainWindow*mainwindow;
 QStringList nombres;
 QStringList apellidos;
 QStringList paises;
@@ -21,36 +21,51 @@ QHash<QString, int> contPecados;
 QStringList creencias;
 QStringList profesiones;
 Mundo* mundo;//EL mundo
+SmtpClient smtp("smtp.gmail.com", 465, SmtpClient::SslConnection);
+
+void contarPecados(){
+    NodoListaPersona*aux=mundo->listaPersonas->primeraPersona;
+    paisPecados.clear();
+    contPecados.clear();
+    while(aux!=NULL){
+        int pecados = aux->dato->pecados[0];
+        pecados += aux->dato->pecados[1];
+        pecados += aux->dato->pecados[2];
+        pecados += aux->dato->pecados[3];
+        pecados += aux->dato->pecados[4];
+        pecados += aux->dato->pecados[5];
+        pecados += aux->dato->pecados[6];
+
+        paisPecados[aux->dato->pais]=paisPecados[aux->dato->pais]+pecados;
+        contPecados[paisContinente[aux->dato->pais]]=paisPecados[aux->dato->pais]+pecados;
+        aux=aux->siguiente;
+    }
+}
 
 void enviarCorreo(QString text, QString recipientMail, QString recipientName, QString subject){
-    QString email="sistemaprogra2@gmail.com";
-    QString password="darules123";
 
-    SmtpClient smtp("smtp.gmail.com", 465, SmtpClient::SslConnection);
-    smtp.setUser(email);
-    smtp.setPassword(password);
     MimeMessage message;
-    message.setSender(new EmailAddress(email, "Sistema - Progra 2"));
+    message.setSender(new EmailAddress("sistemaprogra2@gmail.com", "Sistema - Progra 2"));
     message.addRecipient(new EmailAddress(recipientMail, recipientName));
     message.setSubject(subject);
     MimeHtml html;
     html.setHtml(text);
 
     message.addPart(&html);
-    // Now we can send the mail
-    if (!smtp.connectToHost()) {
-        qDebug() << "Failed to connect to host!" << endl;
-        return;
-    }
-    if (!smtp.login()) {
-        qDebug() << "Failed to login!" << endl;
-        return;
-    }
     if (!smtp.sendMail(message)) {
         qDebug() << "Failed to send mail!" << endl;
         return;
     }
-    smtp.quit();
+
+}
+
+void refrescarVistas(){
+    contarPecados();
+    mainwindow->refrescarTopsPecadores();
+    mainwindow->pintarMapa();
+    mainwindow->refrescarPersonasEnIniferno();
+    mainwindow->refrescarListaNoNacidos();
+    mainwindow->refrescarPersonasEnParaiso();
 }
 
 QStringList pecadosPersonaToQStringList(Persona*persona){
@@ -86,10 +101,12 @@ QStringList personaToQStringList(Persona*persona){
     return res;
 }
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    mainwindow=this;
     //Persona*p=new Persona(1,"a","a","a","a","a","a");
     //PersonaLista*pl=new PersonaLista(p);
 
@@ -180,7 +197,22 @@ void MainWindow::afterLoad(){
         qDebug()<<mundo->encontrarPersona(mundo->ids[i])->dato->id << "-" << mundo->encontrarPersona(mundo->ids[i])->dato->hijos.size();
     }
 
-    //ui->lblMapa->colorMap();
+
+    conectarHilo();
+
+    QString email="sistemaprogra2@gmail.com";
+    QString password="darules123";
+    smtp.setUser(email);
+    smtp.setPassword(password);
+    // Now we can send the mail
+    if (!smtp.connectToHost()) {
+        qDebug() << "Failed to connect to host!" << endl;
+        return;
+    }
+    if (!smtp.login()) {
+        qDebug() << "Failed to login!" << endl;
+        return;
+    }
 
 
 }
@@ -255,27 +287,13 @@ void Mundo::generarPersona(){
         cantHijos-=1;
         aux=familia->root;
     }
-
-}
-
-void contarPecados(){
-    NodoListaPersona*aux=mundo->listaPersonas->primeraPersona;
-    paisPecados.clear();
-    contPecados.clear();
-    while(aux!=NULL){
-        int pecados = aux->dato->pecados[0];
-        pecados += aux->dato->pecados[1];
-        pecados += aux->dato->pecados[2];
-        pecados += aux->dato->pecados[3];
-        pecados += aux->dato->pecados[4];
-        pecados += aux->dato->pecados[5];
-        pecados += aux->dato->pecados[6];
-
-        paisPecados[aux->dato->pais]=paisPecados[aux->dato->pais]+pecados;
-        contPecados[aux->dato->correo]=paisPecados[aux->dato->pais]+pecados;
-        aux=aux->siguiente;
+    if(paraiso->estaEnNoNacidos(nueva->id)){
+        paraiso->noNacidos->removeAll(nueva->id);
+        agregarAlParaiso(nueva->id);
+        refrescarVistas();
     }
 }
+
 
 void MainWindow::pintarMapa(){
     QPixmap px( ":/mapa2.png" );
@@ -457,6 +475,7 @@ void MainWindow :: conectarHilo()
     hiloDeAleatorio = new Hilo(this);
     hiloDeAleatorio->segundos = ui->secSalvacion->value();
     connect (hiloDeAleatorio , SIGNAL(aleatorioDeSalvacion(int)) , this , SLOT(agregarAlParaisoVentana(int)) );
+    hiloDeAleatorio->start();
 }
 
 void Mundo::agregarPecadoresAInfierno(QString pais){
@@ -508,6 +527,67 @@ void Mundo::agregarPecadoresAInfierno(QString pais){
     infierno->crearArbol();
     crearArbol();
 }
+void Mundo::agregarAlParaiso(int idAleatorio)
+{
+    if (!paraiso->salvados->contains(idAleatorio))
+    {
+        paraiso->salvados->append(idAleatorio);
+        QString html;
+
+        if(listaPersonas->buscarPersona(idAleatorio) != NULL) //Si estaba vivo
+        {
+            NodoListaPersona * salvado = new NodoListaPersona(listaPersonas->borrarPersona(idAleatorio));
+            arbol->eliminarPersona(salvado);
+            paraiso->arbolParaiso->insert(salvado->dato);
+            resetearPecados(salvado->dato);
+            cout << "La persona con el ID: " << idAleatorio << " fue salvada desde la Tierra" << endl;
+            html+="<h1>La siguiente persona ha ascendido al cielo</h1>";
+            html+="<tr>";
+            html+="<td>";html+=QString::number(salvado->dato->id);html+="</td>";
+            html+="<td>";html+=salvado->dato->nombre;html+="</td>";
+            html+="<td>";html+=salvado->dato->apellido;html+="</td>";
+            html+="<td>";html+=salvado->dato->pais;html+="</td>";
+            html+="<td>";html+=salvado->dato->creencia;html+="</td>";
+            html+="<td>";html+=salvado->dato->profesion;html+="</td>";
+            html+="<td>";html+=salvado->dato->nacimiento.toString();html+="</td>";
+            html+="</tr>";
+            enviarCorreo(html,salvado->dato->correo,salvado->dato->nombre,"Ascendido al cielo");
+            refrescarVistas();
+        }
+
+        else if (infierno->listaPersonas->buscarPersona(idAleatorio) != NULL) // si está en el infierno
+        {
+            NodoListaPersona * salvado = new NodoListaPersona(infierno->listaPersonas->borrarPersona(idAleatorio));
+            infierno->arbol->deleteKey(salvado);
+            paraiso->arbolParaiso->insert(salvado->dato);
+            resetearPecados(salvado->dato);
+            cout << "La persona con el ID: " << idAleatorio << " fue salvada del Infierno" << endl;
+            html+="<h1>La siguiente persona ha ascendido al cielo</h1>";
+            html+="<tr>";
+            html+="<td>";html+=QString::number(salvado->dato->id);html+="</td>";
+            html+="<td>";html+=salvado->dato->nombre;html+="</td>";
+            html+="<td>";html+=salvado->dato->apellido;html+="</td>";
+            html+="<td>";html+=salvado->dato->pais;html+="</td>";
+            html+="<td>";html+=salvado->dato->creencia;html+="</td>";
+            html+="<td>";html+=salvado->dato->profesion;html+="</td>";
+            html+="<td>";html+=salvado->dato->nacimiento.toString();html+="</td>";
+            html+="</tr>";
+            enviarCorreo(html,salvado->dato->correo,salvado->dato->nombre,"Ascendido al cielo");
+            refrescarVistas();
+        }
+
+        else
+        {
+            paraiso->noNacidos->append(idAleatorio);
+            mainwindow->refrescarListaNoNacidos();
+            cout << "La persona con eL ID: " << idAleatorio << " no ha nacido, pero será salvada" << endl;
+        }
+    }
+
+    cout << "La persona con el ID: " << idAleatorio << " ya fue salvada" << endl;
+
+}
+
 
 void MainWindow::on_btnPlay_clicked()
 {
@@ -517,4 +597,71 @@ void MainWindow::on_btnPlay_clicked()
 void MainWindow::on_btnPausa_clicked()
 {
     hiloDeAleatorio->pausa = true;
+}
+
+void MainWindow::on_secSalvacion_valueChanged(int arg1)
+{
+    hiloDeAleatorio->segundos=arg1;
+}
+void MainWindow::closeEvent(QCloseEvent *event){
+    hiloDeAleatorio->quit();
+    smtp.quit();
+    event->accept();
+}
+void MainWindow::refrescarListaNoNacidos(){
+    ui->lstPersonasNoNacidas->clear();
+    for( int i=0; i<mundo->paraiso->noNacidos->size();++i )
+    {
+        int id=mundo->paraiso->noNacidos->at(i);
+        ui->lstPersonasNoNacidas->addItem(QString("%1").arg(id));
+    }
+}
+
+void MainWindow::on_btnConsultaPaisApellido_clicked()
+{
+    QString apellido=ui->txtConsultaApellido->text();
+    QString pais=ui->txtConsultaPais->text();
+    QTableWidget *tbl=ui->tblConsulta;
+    tbl->setRowCount(0);
+    NodoListaPersona*auxPL=mundo->listaPersonas->primeraPersona;
+    while (auxPL!=NULL) {
+        Persona*auxDato=auxPL->dato;
+        if(auxDato->apellido==apellido&&auxDato->pais==pais){
+            QStringList lst=personaToQStringList(auxDato);
+            lst<<"Mundo";
+            agregarATable(tbl,lst);
+        }
+        auxPL=auxPL->siguiente;
+    }
+    auxPL=mundo->infierno->listaPersonas->primeraPersona;
+    while (auxPL!=NULL) {
+        Persona*auxDato=auxPL->dato;
+        if(auxDato->apellido==apellido&&auxDato->pais==pais){
+            QStringList lst=personaToQStringList(auxDato);
+            lst<<"Infierno";
+            agregarATable(tbl,lst);
+        }
+        auxPL=auxPL->siguiente;
+    }
+
+    mundo->paraiso->resetearRes();
+    mundo->paraiso->obtenerPersonasApellidoPais(mundo->paraiso->arbolParaiso->root,apellido,pais);
+    for(int i=0; i<mundo->paraiso->res.size();++i){
+        QStringList lst=personaToQStringList(mundo->paraiso->res.at(i));
+        lst<<"Paraiso";
+        agregarATable(tbl,lst);
+    }
+
+
+}
+
+void MainWindow::refrescarPersonasEnParaiso(){
+    QTableWidget*tbl=ui->tblPersonasEnParaiso;
+    tbl->setRowCount(0);
+    mundo->paraiso->resetearRes();
+    mundo->paraiso->obtenerPersonas(mundo->paraiso->arbolParaiso->root);
+    for(int i =0; i<mundo->paraiso->res.size();++i){
+        agregarATable(tbl,personaToQStringList(mundo->paraiso->res.at(i)));
+    }
+
 }

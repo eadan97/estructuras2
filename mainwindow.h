@@ -23,7 +23,13 @@ public:
     Hilo * hiloDeAleatorio;
 
     ~MainWindow();
+    void refrescarTopsPecadores();
+    void refrescarPersonasEnIniferno();
+    void refrescarPersonasEnParaiso();
+    void pintarMapa();
+    void refrescarListaNoNacidos();
 private slots:
+    void closeEvent(QCloseEvent *event);
     void on_btnGenerarPersonas_clicked();
     void on_btnAgregarPecados_clicked();
     void on_btnPecadosFamilia_clicked();
@@ -31,15 +37,16 @@ private slots:
     void on_btnCondenarPais_clicked();
     void procesarArchivo(QStringList&list,QString fileDir);
     void arreglarPaises();
-    void refrescarTopsPecadores();
-    void refrescarPersonasEnIniferno();
-    void pintarMapa();
 
     void conectarHilo();
 
     void on_btnPlay_clicked();
 
     void on_btnPausa_clicked();
+
+    void on_secSalvacion_valueChanged(int arg1);
+
+    void on_btnConsultaPaisApellido_clicked();
 
 private:
     Ui::MainWindow *ui;

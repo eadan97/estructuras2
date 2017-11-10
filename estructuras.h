@@ -95,17 +95,39 @@ struct Infierno
 
 struct Paraiso
 {
-    AVLtree<NodoListaPersona*> * arbolParaiso = new AVLtree<NodoListaPersona*>;
+    AVLtree<Persona*> * arbolParaiso = new AVLtree<Persona*>;
     AVLtree<int>  *arbolDeLaVida = new AVLtree<int>;
-    QList<int> * noNacidos;
-    QList<int> * salvados;
+    QList<int> * noNacidos = new QList<int>();
+    QList<int> * salvados = new QList<int>();
+    QList<Persona*>res;
 
     Paraiso (){}
+    void resetearRes(){
+        res=QList<Persona*>();
+    }
+    void obtenerPersonas(AVLnode<Persona*>*n){
+        if (n != NULL) {
+            obtenerPersonas(n->left);
+                res.append(n->key);
+            obtenerPersonas(n->right);
+        }
+    }
+    void obtenerPersonasApellidoPais(AVLnode<Persona*>*n, QString apellido, QString pais){
+        if (n != NULL) {
+            obtenerPersonasApellidoPais(n->left, apellido, pais);
+            if(n->key->apellido.compare(apellido)==0&&n->key->pais.compare(pais)==0)
+                res.append(n->key);
+            obtenerPersonasApellidoPais(n->right, apellido, pais);
+        }
+    }
+    bool estaEnNoNacidos(int id){
+        return noNacidos->contains(id);
+    }
 };
 
 struct Mundo
 {
-    Paraiso * paraiso;
+    Paraiso * paraiso=new Paraiso();
     Infierno  * infierno=new Infierno();
     ArbolPersonas *arbol= new ArbolPersonas();
     ListaPersonas * listaPersonas = new ListaPersonas;
@@ -307,40 +329,7 @@ struct Mundo
 
     void agregarPecadoresAInfierno(QString pais);
 
-    void agregarAlParaiso(int idAleatorio)
-    {
-        if (!paraiso->salvados->contains(idAleatorio))
-        {
-            paraiso->salvados->append(idAleatorio);
-
-            if(listaPersonas->buscarPersona(idAleatorio) != NULL) //Si estaba vivo
-            {
-                NodoListaPersona * salvado = new NodoListaPersona(listaPersonas->borrarPersona(idAleatorio));
-                arbol->eliminarPersona(salvado);
-                paraiso->arbolParaiso->insert(salvado);
-                cout << "La persona con el ID: " << idAleatorio << " fue salvada desde la Tierra" << endl;
-
-            }
-
-            else if (infierno->listaPersonas->buscarPersona(idAleatorio) != NULL) // si está en el infierno
-            {
-                NodoListaPersona * salvado = new NodoListaPersona(infierno->listaPersonas->borrarPersona(idAleatorio));
-                infierno->arbol->deleteKey(salvado);
-                paraiso->arbolParaiso->insert(salvado);
-                cout << "La persona con el ID: " << idAleatorio << " fue salvada del Infierno" << endl;
-            }
-
-            else
-            {
-                paraiso->noNacidos->append(idAleatorio);
-                cout << "La persona con eL ID: " << idAleatorio << " no ha nacido, pero será salvada" << endl;
-            }
-        }
-
-        cout << "La persona con el ID: " << idAleatorio << " ya fue salvada" << endl;
-
-    }
-    
+    void agregarAlParaiso(int idAleatorio);
 };
 
 

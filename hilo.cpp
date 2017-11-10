@@ -8,6 +8,7 @@ Hilo::Hilo(QObject *parent)
 
 void Hilo::run()
 {
+    while(true){
     int aleatorio = 0;
     srand (time(NULL));
 
@@ -22,5 +23,5 @@ void Hilo::run()
         emit aleatorioDeSalvacion(aleatorio);
 
         this->sleep(segundos);
-    }
+    }}
 }
