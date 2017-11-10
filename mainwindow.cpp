@@ -17,7 +17,7 @@ QStringList paises;
 QHash<QString, QString> paisCorreo;
 QHash<QString, QString> paisContinente;
 QHash<QString, int> paisPecados;
-QHash<QString, int> contPecados;
+QHash<QString, int> continentePecados;
 QStringList creencias;
 QStringList profesiones;
 Mundo* mundo;//EL mundo
@@ -261,7 +261,7 @@ void Mundo::generarPersona(){
 void contarPecados(){
     NodoListaPersona*aux=mundo->listaPersonas->primeraPersona;
     paisPecados.clear();
-    contPecados.clear();
+    continentePecados.clear();
     while(aux!=NULL){
         int pecados = aux->dato->pecados[0];
         pecados += aux->dato->pecados[1];
@@ -272,7 +272,7 @@ void contarPecados(){
         pecados += aux->dato->pecados[6];
 
         paisPecados[aux->dato->pais]=paisPecados[aux->dato->pais]+pecados;
-        contPecados[aux->dato->correo]=paisPecados[aux->dato->pais]+pecados;
+        continentePecados[aux->dato->correo]=paisPecados[aux->dato->pais]+pecados;
         aux=aux->siguiente;
     }
 }
@@ -296,7 +296,7 @@ void MainWindow::pintarMapa(){
     QPixmap mAnta=px.createMaskFromColor( anta, Qt::MaskOutColor ) ;
 
     int pecadosTotales=0;
-    QList<int> vals = contPecados.values();
+    QList<int> vals = continentePecados.values();
 
     foreach (int val, vals) {
         pecadosTotales+=val;
@@ -304,27 +304,27 @@ void MainWindow::pintarMapa(){
     float aFloat;
 
     QPainter p(&px);
-    aFloat=1/(pecadosTotales/(255*(float)contPecados["Asia"]));
+    aFloat=1/(pecadosTotales/(255*(float)continentePecados["Asia"]));
     p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
     p.drawPixmap(px.rect(), mAsia, mAsia.rect());
     //p.end();
-    aFloat=1/(pecadosTotales/(255*(float)contPecados["Europe"]));
+    aFloat=1/(pecadosTotales/(255*(float)continentePecados["Europe"]));
 
     p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
     p.drawPixmap(px.rect(), mEuro, mEuro.rect());
-    aFloat=1/(pecadosTotales/(255*(float)contPecados["Oceania"]));
+    aFloat=1/(pecadosTotales/(255*(float)continentePecados["Oceania"]));
 
     p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
     p.drawPixmap(px.rect(), mOcea, mOcea.rect());
-    aFloat=1/(pecadosTotales/(255*(float)contPecados["Africa"]));
+    aFloat=1/(pecadosTotales/(255*(float)continentePecados["Africa"]));
 
     p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
     p.drawPixmap(px.rect(), mAfri, mAfri.rect());
-    aFloat=1/(pecadosTotales/(255*(float)contPecados["North America"]));
+    aFloat=1/(pecadosTotales/(255*(float)continentePecados["North America"]));
 
     p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
     p.drawPixmap(px.rect(), mNort, mNort.rect());
-    aFloat=1/(pecadosTotales/(255*(float)contPecados["South America"]));
+    aFloat=1/(pecadosTotales/(255*(float)continentePecados["South America"]));
 
     p.setPen(QColor(255, 255-((int)aFloat), 255-((int)aFloat)));
     p.drawPixmap(px.rect(), mSou, mSou.rect());
