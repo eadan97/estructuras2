@@ -26,7 +26,7 @@ SmtpClient smtp("smtp.gmail.com", 465, SmtpClient::SslConnection);
 void contarPecados(){
     NodoListaPersona*aux=mundo->listaPersonas->primeraPersona;
     paisPecados.clear();
-    contPecados.clear();
+    continentePecados.clear();
     while(aux!=NULL){
         int pecados = aux->dato->pecados[0];
         pecados += aux->dato->pecados[1];
@@ -37,7 +37,7 @@ void contarPecados(){
         pecados += aux->dato->pecados[6];
 
         paisPecados[aux->dato->pais]=paisPecados[aux->dato->pais]+pecados;
-        contPecados[paisContinente[aux->dato->pais]]=paisPecados[aux->dato->pais]+pecados;
+        continentePecados[paisContinente[aux->dato->pais]]=paisPecados[aux->dato->pais]+pecados;
         aux=aux->siguiente;
     }
 }
@@ -292,26 +292,9 @@ void Mundo::generarPersona(){
         agregarAlParaiso(nueva->id);
         refrescarVistas();
 
-}
+}}
 
-void contarPecados(){
-    NodoListaPersona*aux=mundo->listaPersonas->primeraPersona;
-    paisPecados.clear();
-    continentePecados.clear();
-    while(aux!=NULL){
-        int pecados = aux->dato->pecados[0];
-        pecados += aux->dato->pecados[1];
-        pecados += aux->dato->pecados[2];
-        pecados += aux->dato->pecados[3];
-        pecados += aux->dato->pecados[4];
-        pecados += aux->dato->pecados[5];
-        pecados += aux->dato->pecados[6];
 
-        paisPecados[aux->dato->pais]=paisPecados[aux->dato->pais]+pecados;
-        continentePecados[aux->dato->correo]=paisPecados[aux->dato->pais]+pecados;
-        aux=aux->siguiente;
-    }
-}
 
 
 void MainWindow::pintarMapa(){
