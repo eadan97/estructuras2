@@ -261,6 +261,22 @@ struct Mundo
         sumarPecadosANietos(persona->hijos);
     }
 
+    //D: Función que retorna una QList con punteros a persona del país ingresado
+    QList<Persona *> personasDePais(QString pais)
+    {
+        QList<Persona *> personas;
+        NodoListaPersona * temporal = listaPersonas->primeraPersona;
+        while (temporal != NULL)
+        {
+            if (temporal->dato->pais.compare(pais) == 0)
+                personas.append(temporal->dato);
+
+            temporal = temporal->siguiente;
+        }
+        return personas;
+    }
+
+
     //D: Función que recorre la lista de humanos y le suma a sus pecados
     //E: Ninguna
     //S: Ninguna
@@ -281,50 +297,6 @@ struct Mundo
         {
             persona->pecados[i] = 0;
         }
-    }
-
-    //D: Función que retorna una QList con punteros a persona del país ingresado
-    QList<Persona *> personasDePais(QString pais)
-    {
-        QList<Persona *> personas;
-        NodoListaPersona * temporal = listaPersonas->primeraPersona;
-        while (temporal != NULL)
-        {
-            if (temporal->dato->pais.compare(pais) == 0)
-                personas.append(temporal->dato);
-
-            temporal = temporal->siguiente;
-        }
-        return personas;
-    }
-
-    //D: Dada una QList de personas, los ingresa en una lista doblemente enlazada y los ordena en orden descendente de acuerdo a sus pecados
-    ListaPersonas * ordenarPecadoresDePais(QList<Persona *> personas)
-    {
-        ListaPersonas * pecadoresOrdenados;
-        for (int i = 0 ; i < personas.size() ; ++i)
-        {
-            pecadoresOrdenados->insertarPorPecados(personas[i]);
-        }
-        return pecadoresOrdenados;
-    }
-
-    //D: Función que retorna una QList con los punteros al 25% más pecador de un país
-    //E: Un país (QString)
-    //S: Una QList con los punteros al 25% más pecador de un país
-    //R: Que el país exista
-    QList<Persona *> * masPecadoresDePais(QString pais)
-    {
-        QList <Persona *> * masPecadores;
-        int cantPersonasPais = personasDePais(pais).size();
-        int veintiCincoPorCiento = cantPersonasPais * 0.25; //asumiendo que ya está redondeado
-        ListaPersonas * pecadores = ordenarPecadoresDePais(personasDePais(pais));
-        for (int i = 0; i < veintiCincoPorCiento ; ++i)
-        {
-            masPecadores->append(pecadores->primeraPersona->dato);
-            pecadores->borrarAlInicio();
-        }
-        return masPecadores;
     }
 
     void agregarPecadoresAInfierno(QString pais);

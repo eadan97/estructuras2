@@ -1,6 +1,7 @@
 #ifndef ARBOLPERSONAS_H
 #define ARBOLPERSONAS_H
 #include <algorithm>
+#include <QList>
 
 struct NodoArbolPersona
 {

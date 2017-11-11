@@ -28,6 +28,15 @@ public:
     void refrescarPersonasEnParaiso();
     void pintarMapa();
     void refrescarListaNoNacidos();
+
+    ListaPersonas * ordenarPecadores(QList<Persona *> * personas);
+    QList<Persona *> * personasPorContinente(QString continente);
+    QList<Persona *> * personasDePaisConsulta(QString pais);
+    QList<Persona *> * personasDeApellidoConsulta(QString apellido);
+    QList<Persona *> * personasDeCreenciaConsulta(QString creencia);
+    QList<Persona *> * personasDeProfesionConsulta(QString profesion);
+    int cantPecadosDeLista(QList<Persona *> * personas);
+
 private slots:
     void closeEvent(QCloseEvent *event);
     void on_btnGenerarPersonas_clicked();
@@ -47,6 +56,8 @@ private slots:
     void on_secSalvacion_valueChanged(int arg1);
 
     void on_btnConsultaPaisApellido_clicked();
+
+    void on_btnConsultar_clicked();
 
 private:
     Ui::MainWindow *ui;

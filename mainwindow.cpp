@@ -128,15 +128,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 }
 
-QList<Persona *> personasPorContinente(QString continente)
+QList<Persona *> * MainWindow :: personasPorContinente(QString continente)
 {
-    QList<Persona *> personas;
+    QList<Persona *> * personas;
     NodoListaPersona * temporal = mundo->listaPersonas->primeraPersona;
     while (temporal != NULL)
     {
         if (paisContinente[temporal->dato->pais].compare(continente) == 0)
-            personas.append(temporal->dato);
-
+            personas->append(temporal->dato);
         temporal = temporal->siguiente;
     }
     return personas;
@@ -294,9 +293,6 @@ void Mundo::generarPersona(){
 
 }}
 
-
-
-
 void MainWindow::pintarMapa(){
     QPixmap px( ":/mapa2.png" );
     QColor asia(255,0,255);//Asia
@@ -407,9 +403,7 @@ void MainWindow::agregarATable(QTableWidget*tbl, QStringList lista){
         tbl->setItem(lastRow,i,new QTableWidgetItem(lista[i]));
     }
 
-
 }
-
 
 void MainWindow::refrescarTopsPecadores(){
     ui->lstPaisesMenosPecadores->clear();
@@ -529,6 +523,7 @@ void Mundo::agregarPecadoresAInfierno(QString pais){
     infierno->crearArbol();
     crearArbol();
 }
+
 void Mundo::agregarAlParaiso(int idAleatorio)
 {
     if (!paraiso->salvados->contains(idAleatorio))
@@ -589,7 +584,6 @@ void Mundo::agregarAlParaiso(int idAleatorio)
     cout << "La persona con el ID: " << idAleatorio << " ya fue salvada" << endl;
 
 }
-
 
 void MainWindow::on_btnPlay_clicked()
 {
@@ -666,4 +660,226 @@ void MainWindow::refrescarPersonasEnParaiso(){
         agregarATable(tbl,personaToQStringList(mundo->paraiso->res.at(i)));
     }
 
+}
+
+//D: Dada una QList de personas, los ingresa en una lista doblemente enlazada y los ordena en orden descendente de acuerdo a sus pecados
+ListaPersonas * MainWindow :: ordenarPecadores(QList<Persona *> * personas)
+{
+    ListaPersonas * pecadoresOrdenados = new ListaPersonas();
+    for (int i = 0 ; i < personas->size() ; ++i)
+    {
+        pecadoresOrdenados->insertarPorPecados(personas->at(i));
+    }
+    return pecadoresOrdenados;
+}
+
+QList<Persona *> * MainWindow :: personasDeApellidoConsulta(QString apellido)
+{
+    QList<Persona *> * personas;
+    NodoListaPersona * temporal = mundo->listaPersonas->primeraPersona;
+    while (temporal != NULL)
+    {
+        if (temporal->dato->apellido.compare(apellido) == 0)
+            personas->append(temporal->dato);
+        temporal = temporal->siguiente;
+    }
+    return personas;
+}
+
+QList<Persona *> * MainWindow :: personasDePaisConsulta(QString pais)
+{
+    QList<Persona *> * personas;
+    NodoListaPersona * temporal = mundo->listaPersonas->primeraPersona;
+    while (temporal != NULL)
+    {
+        if (temporal->dato->pais.compare(pais) == 0)
+            personas->append(temporal->dato);
+        temporal = temporal->siguiente;
+    }
+    return personas;
+}
+
+QList<Persona *> *MainWindow :: personasDeCreenciaConsulta(QString creencia)
+{
+    QList<Persona *> * personas;
+    NodoListaPersona * temporal = mundo->listaPersonas->primeraPersona;
+    while (temporal != NULL)
+    {
+        if (temporal->dato->creencia.compare(creencia) == 0)
+            personas->append(temporal->dato);
+        temporal = temporal->siguiente;
+    }
+    return personas;
+}
+
+QList<Persona *> * MainWindow :: personasDeProfesionConsulta(QString profesion)
+{
+    QList<Persona *> * personas;
+    NodoListaPersona * temporal = mundo->listaPersonas->primeraPersona;
+    while (temporal != NULL)
+    {
+        if (temporal->dato->profesion.compare(profesion) == 0)
+            personas->append(temporal->dato);
+        temporal = temporal->siguiente;
+    }
+    return personas;
+}
+
+int MainWindow :: cantPecadosDeLista(QList<Persona *> *personas)
+{
+    int cantidad = 0;
+    for (int i = 0; i < personas->size(); ++i)
+    {
+        cantidad += personas->at(i)->sumatoriaDePecados();
+    }
+    return cantidad;
+}
+
+void MainWindow::on_btnConsultar_clicked()
+{
+    QString criterio = ui->cmbCriterio->currentText();
+    QString eleccion = ui->txtCriterio->text();
+    ui->txtCriterio->clear();
+
+    int pecadosTotales = 0;
+    QList<int> vals = continentePecados.values();
+
+    foreach (int val, vals) {
+        pecadosTotales += val;
+    }
+
+    if (criterio.compare("Apellido") == 0)
+    {
+        QList<Persona *> * aUsar = personasDeApellidoConsulta(eleccion);
+        ListaPersonas * ordenadas = ordenarPecadores(aUsar);
+
+        float cuantosEnLista = (float)(aUsar->size());
+        float poblacionTotal = (float)(mundo->listaPersonas->cantPersonas());
+        float porcentajePoblacion = (cuantosEnLista * 100)/poblacionTotal;
+        ui->lblPrcntPoblacion->setText(QString::number(porcentajePoblacion));
+
+        float cantPecados = (float)(cantPecadosDeLista(aUsar));
+        float totalPecados = (float)(pecadosTotales);
+        float porcentajePecados = (cantPecados * 100)/totalPecados;
+        ui->lblPrcntPecados->setText(QString::number(porcentajePecados));
+
+        if (ordenadas!= NULL)
+        {
+            NodoListaPersona * temporal = ordenadas->primeraPersona;
+            while (temporal != NULL)
+            {
+                QStringList strTemporal = personaToQStringList(temporal->dato);
+                agregarATable(ui->tblPecadoresOrdenados , strTemporal);
+                temporal = temporal->siguiente;
+            }
+        }
+    }
+
+    else if (criterio.compare("Pais") == 0)
+    {
+        QList<Persona *> * aUsar = personasDePaisConsulta(eleccion);
+        ListaPersonas * ordenadas = ordenarPecadores(aUsar);
+
+        float cuantosEnLista = (float)(aUsar->size());
+        float poblacionTotal = (float)(mundo->listaPersonas->cantPersonas());
+        float porcentajePoblacion = (cuantosEnLista * 100)/poblacionTotal;
+        ui->lblPrcntPoblacion->setText(QString::number(porcentajePoblacion));
+
+        float cantPecados = (float)(cantPecadosDeLista(aUsar));
+        float totalPecados = (float)(pecadosTotales);
+        float porcentajePecados = (cantPecados * 100)/totalPecados;
+        ui->lblPrcntPecados->setText(QString::number(porcentajePecados));
+
+        if (ordenadas!= NULL)
+        {
+            NodoListaPersona * temporal = ordenadas->primeraPersona;
+            while (temporal != NULL)
+            {
+                QStringList strTemporal = personaToQStringList(temporal->dato);
+                agregarATable(ui->tblPecadoresOrdenados , strTemporal);
+                temporal = temporal->siguiente;
+            }
+        }
+    }
+
+    else if (criterio.compare("Creencia") == 0)
+    {
+        QList<Persona *> * aUsar = personasDeCreenciaConsulta(eleccion);
+        ListaPersonas * ordenadas = ordenarPecadores(aUsar);
+
+        float cuantosEnLista = (float)(aUsar->size());
+        float poblacionTotal = (float)(mundo->listaPersonas->cantPersonas());
+        float porcentajePoblacion = (cuantosEnLista * 100)/poblacionTotal;
+        ui->lblPrcntPoblacion->setText(QString::number(porcentajePoblacion));
+
+        float cantPecados = (float)(cantPecadosDeLista(aUsar));
+        float totalPecados = (float)(pecadosTotales);
+        float porcentajePecados = (cantPecados * 100)/totalPecados;
+        ui->lblPrcntPecados->setText(QString::number(porcentajePecados));
+
+        if (ordenadas!= NULL)
+        {
+            NodoListaPersona * temporal = ordenadas->primeraPersona;
+            while (temporal != NULL)
+            {
+                QStringList strTemporal = personaToQStringList(temporal->dato);
+                agregarATable(ui->tblPecadoresOrdenados , strTemporal);
+                temporal = temporal->siguiente;
+            }
+        }
+    }
+
+    else if (criterio.compare("Profesion") == 0)
+    {
+        QList<Persona *> * aUsar = personasDeProfesionConsulta(eleccion);
+        ListaPersonas * ordenadas = ordenarPecadores(aUsar);
+
+        float cuantosEnLista = (float)(aUsar->size());
+        float poblacionTotal = (float)(mundo->listaPersonas->cantPersonas());
+        float porcentajePoblacion = (cuantosEnLista * 100)/poblacionTotal;
+        ui->lblPrcntPoblacion->setText(QString::number(porcentajePoblacion));
+
+        float cantPecados = (float)(cantPecadosDeLista(aUsar));
+        float totalPecados = (float)(pecadosTotales);
+        float porcentajePecados = (cantPecados * 100)/totalPecados;
+        ui->lblPrcntPecados->setText(QString::number(porcentajePecados));
+
+        if (ordenadas!= NULL)
+        {
+            NodoListaPersona * temporal = ordenadas->primeraPersona;
+            while (temporal != NULL)
+            {
+                QStringList strTemporal = personaToQStringList(temporal->dato);
+                agregarATable(ui->tblPecadoresOrdenados , strTemporal);
+                temporal = temporal->siguiente;
+            }
+        }
+    }
+
+    else if (criterio.compare("Continente") == 0)
+    {
+        QList<Persona *> * aUsar = personasPorContinente(eleccion);
+        ListaPersonas * ordenadas = ordenarPecadores(aUsar);
+
+        float cuantosEnLista = (float)(aUsar->size());
+        float poblacionTotal = (float)(mundo->listaPersonas->cantPersonas());
+        float porcentajePoblacion = (cuantosEnLista * 100)/poblacionTotal;
+        ui->lblPrcntPoblacion->setText(QString::number(porcentajePoblacion));
+
+        float cantPecados = (float)(cantPecadosDeLista(aUsar));
+        float totalPecados = (float)(pecadosTotales);
+        float porcentajePecados = (cantPecados * 100)/totalPecados;
+        ui->lblPrcntPecados->setText(QString::number(porcentajePecados));
+
+        if (ordenadas!= NULL)
+        {
+            NodoListaPersona * temporal = ordenadas->primeraPersona;
+            while (temporal != NULL)
+            {
+                QStringList strTemporal = personaToQStringList(temporal->dato);
+                agregarATable(ui->tblPecadoresOrdenados , strTemporal);
+                temporal = temporal->siguiente;
+            }
+        }
+    }
 }
